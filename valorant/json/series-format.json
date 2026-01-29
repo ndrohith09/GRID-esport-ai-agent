@@ -1,0 +1,76 @@
+{
+  "data": {
+    "seriesFormats": [
+      {
+        "id": "1",
+        "name": "best-of-1",
+        "nameShortened": "Bo1"
+      },
+      {
+        "id": "2",
+        "name": "best-of-2",
+        "nameShortened": "Bo2"
+      },
+      {
+        "id": "3",
+        "name": "best-of-3",
+        "nameShortened": "Bo3"
+      },
+      {
+        "id": "4",
+        "name": "best-of-5",
+        "nameShortened": "Bo5"
+      },
+      {
+        "id": "5",
+        "name": "best-of-7",
+        "nameShortened": "Bo7"
+      },
+      {
+        "id": "6",
+        "name": "score-after-1",
+        "nameShortened": "SA1"
+      },
+      {
+        "id": "7",
+        "name": "score-after-2",
+        "nameShortened": "SA2"
+      },
+      {
+        "id": "8",
+        "name": "score-after-3",
+        "nameShortened": "SA3"
+      },
+      {
+        "id": "9",
+        "name": "score-after-4",
+        "nameShortened": "SA4"
+      },
+      {
+        "id": "10",
+        "name": "score-after-5",
+        "nameShortened": "SA5"
+      },
+      {
+        "id": "11",
+        "name": "score-after-6",
+        "nameShortened": "SA6"
+      },
+      {
+        "id": "12",
+        "name": "score-after-7",
+        "nameShortened": "SA7"
+      },
+      {
+        "id": "13",
+        "name": "score-after-8",
+        "nameShortened": "SA8"
+      },
+      {
+        "id": "14",
+        "name": "score-after-9",
+        "nameShortened": "SA9"
+      }
+    ]
+  }
+}

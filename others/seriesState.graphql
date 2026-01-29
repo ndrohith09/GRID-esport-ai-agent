@@ -1,0 +1,110 @@
+query GetLiveValorantSeriesState {
+  seriesState(id: "2819703") {
+    id
+    valid
+    updatedAt
+    format
+    started
+    finished    
+    teams {
+      id
+      name
+      won
+      kills
+      score
+      killAssistsReceived
+      killAssistsGiven
+      weaponKills{
+        id
+        weaponName
+        count
+      }
+      teamkills
+      teamkillAssistsReceived
+      deaths      
+      
+      multikills{
+        id
+        numberOfKills
+        count
+      }
+      players{
+        ...seriesPlayerStateValorant
+      }
+    }
+    games {
+      id
+      sequenceNumber
+      teams {
+        name
+        players {
+           ... gamePlayerStateValorant
+        }
+      }
+    }
+  }
+}
+
+fragment seriesPlayerStateValorant on SeriesPlayerStateValorant {
+        id
+        name
+          participationStatus
+        kills
+        objectives{
+          type
+          id
+        }
+          headshots
+          teamHeadshots
+          structuresCaptured
+          structuresDestroyed
+          
+        }
+        
+fragment gamePlayerStateValorant on GamePlayerStateValorant {
+            id
+            name
+            damageDealtTargets{
+              target {
+                name
+              }
+              damageAmount
+              occurrenceCount
+            }
+            damageDealtSources{
+              source {
+                name
+              }
+              damageAmount
+              occurrenceCount
+            }
+            
+            teamdamageTaken
+            teamdamageDealt
+            selfdamageTaken
+            selfdamageDealt
+            damageTaken
+            damageDealt
+            ultimatePoints
+            teamkills
+            teamHeadshots
+            alive
+            maxHealth
+            currentArmor
+            currentHealth
+            statusEffects {
+              id
+              name
+            }
+            abilities {
+              id
+              name
+              charges
+            }
+            unitKills{
+              id
+              unitName
+              count
+            }
+            
+          }

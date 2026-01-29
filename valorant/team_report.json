@@ -1,0 +1,129 @@
+{
+    "meta_data": {
+        "team_id": "79",
+        "series_id": 2775970
+    },
+    "team_strength_score": 0.662,
+    "win_probability": 0.9980000257492065,
+    "strengths": [
+        {
+            "feature": "deaths",
+            "shap_score": 0.25168347358703613,
+            "normalized_score": 1.0,
+            "impact_level": "high impact",
+            "direction": "positive",
+            "win_signal": "strongly supports winning"
+        },
+        {
+            "feature": "least_weapon_ratio",
+            "shap_score": 0.17937049269676208,
+            "normalized_score": 0.713,
+            "impact_level": "high impact",
+            "direction": "positive",
+            "win_signal": "strongly supports winning"
+        },
+        {
+            "feature": "top_weapon_ratio",
+            "shap_score": 0.15906788408756256,
+            "normalized_score": 0.632,
+            "impact_level": "moderate impact",
+            "direction": "positive",
+            "win_signal": "strongly supports winning"
+        },
+        {
+            "feature": "assist_density",
+            "shap_score": 0.14823541045188904,
+            "normalized_score": 0.589,
+            "impact_level": "moderate impact",
+            "direction": "positive",
+            "win_signal": "minor influence"
+        },
+        {
+            "feature": "team_id",
+            "shap_score": 0.0992063358426094,
+            "normalized_score": 0.394,
+            "impact_level": "low impact",
+            "direction": "positive",
+            "win_signal": "minor influence"
+        }
+    ],
+    "weaknesses": [
+        {
+            "feature": "kill_diff",
+            "shap_score": -4.612887382507324,
+            "normalized_score": 1.0,
+            "impact_level": "high impact",
+            "direction": "negative"
+        },
+        {
+            "feature": "kills",
+            "shap_score": -0.6779214143753052,
+            "normalized_score": 0.147,
+            "impact_level": "negligible impact",
+            "direction": "negative"
+        },
+        {
+            "feature": "team_headshot_ratio",
+            "shap_score": -0.26716333627700806,
+            "normalized_score": 0.058,
+            "impact_level": "negligible impact",
+            "direction": "negative"
+        },
+        {
+            "feature": "rifle_ratio",
+            "shap_score": -0.22448310256004333,
+            "normalized_score": 0.049,
+            "impact_level": "negligible impact",
+            "direction": "negative"
+        },
+        {
+            "feature": "smg_ratio",
+            "shap_score": -0.0828062891960144,
+            "normalized_score": 0.018,
+            "impact_level": "negligible impact",
+            "direction": "negative"
+        }
+    ],
+    "weapon_analysis": {
+        "rifle_ratio": 0.681,
+        "eco_ratio": 0.153,
+        "sniper_ratio": 0.025,
+        "smg_ratio": 0.037,
+        "shotgun_ratio": 0.006,
+        "weapon_dependency": 0.417,
+        "weapon_entropy": 1.77,
+        "weapon_benefit_score": 0.5
+    },
+    "combat_metrics": {
+        "kills": 166,
+        "deaths": 134,
+        "kill_diff": 32,
+        "headshot_ratio": 0.771
+    },
+    "teamplay_metrics": {
+        "assist_density": 0.506,
+        "avg_player_kills": 33.2,
+        "kill_distribution_std": 3.87
+    },
+    "overall_weapon_win_impact": {
+        "ghost": 0.4988009592326139,
+        "classic": 0.5036319612590799,
+        "guardian": 0.4912718204488778,
+        "bulldog": 0.5114503816793893,
+        "vandal": 0.5,
+        "stinger": 0.4935064935064935,
+        "odin": 0.5620437956204379,
+        "spectre": 0.5318181818181819,
+        "operator": 0.504424778761062,
+        "sheriff": 0.4938875305623472,
+        "phantom": 0.5012048192771085,
+        "melee": 0.391304347826087,
+        "outlaw": 0.5851528384279476,
+        "bucky": 0.4418604651162791,
+        "frenzy": 0.5190839694656488,
+        "judge": 0.5032258064516129,
+        "shorty": 0.5943396226415094,
+        "marshal": 0.5616438356164384,
+        "ares": 0.6666666666666666
+    }
+}

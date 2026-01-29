@@ -1,0 +1,178 @@
+{
+  "meta": {
+    "player_id": 14,
+    "player_name": "aspas",
+    "series_id": 2819695,
+    "round": 1,
+    "notes": [
+      "High-risk duelist: Takes massive damage during encounters.",
+      "Safety Concern: High self-damage recorded; check ability usage (Raze satchels/nades)."
+    ]
+  },
+  "agent_fit": {
+    "recommended_agent": "raze",
+    "top_agents": { "raze": 2, "jett": 1, "neon": 1, "phoenix": 1 }
+  },
+  "ability_fit": {
+    "best_ability": "boom-bot",
+    "ability_breakdown": {
+      "blast-pack": { "usage_ratio": 0.0, "usage_level": "low" },
+      "paint-shells": { "usage_ratio": 0.0, "usage_level": "low" },
+      "boom-bot": { "usage_ratio": 1.0, "usage_level": "moderate" },
+      "showstopper": { "usage_ratio": 0.0, "usage_level": "low" }
+    }
+  },
+  "objective_fit": {
+    "best_objective": "captureUltimateOrb",
+    "objective_breakdown": [
+      {
+        "objective": "captureUltimateOrb",
+        "completion_count": 5,
+        "completed_first": "True",
+        "suitability_score": 7
+      },
+      {
+        "objective": "defuseBomb",
+        "completion_count": 2,
+        "completed_first": "True",
+        "suitability_score": 4
+      },
+      {
+        "objective": "plantBomb",
+        "completion_count": 4,
+        "completed_first": "False",
+        "suitability_score": 4
+      },
+      {
+        "objective": "beginDefuseBomb",
+        "completion_count": 2,
+        "completed_first": "False",
+        "suitability_score": 2
+      },
+      {
+        "objective": "stopDefuseBomb",
+        "completion_count": 2,
+        "completed_first": "False",
+        "suitability_score": 2
+      },
+      {
+        "objective": "explodeBomb",
+        "completion_count": 1,
+        "completed_first": "False",
+        "suitability_score": 1
+      }
+    ]
+  },
+  "economy_profile": {
+    "player_loadout_ratio": 0.196,
+    "player_networth_ratio": 0.194,
+    "money_left_ratio": 0.2
+  },
+  "eco_summary": {
+    "summary": "Player is an economy-balanced contributor, contributing 19% of team firepower. They spends most of their credits each round.",
+    "labels": {
+      "investment_style": "economy-balanced contributor",
+      "credit_discipline": "spends most of their credits each round"
+    }
+  },
+  "player_strength_score": 0.002,
+  "strengths": [
+    {
+      "feature": "shotgun_damage_ratio",
+      "shap_score": 0.08900000154972076,
+      "normalized_score": 0.0,
+      "direction": "positive",
+      "impact_level": "moderate impact"
+    }
+  ],
+  "weaknesses": [
+    {
+      "feature": "headshot_damage_ratio",
+      "shap_score": -0.057999998331069946,
+      "normalized_score": 0.0,
+      "direction": "negative",
+      "impact_level": "moderate impact"
+    },
+    {
+      "feature": "body_damage_ratio",
+      "shap_score": -0.17599999904632568,
+      "normalized_score": 0.0,
+      "direction": "negative",
+      "impact_level": "high impact"
+    },
+    {
+      "feature": "damage_efficiency",
+      "shap_score": -4.40500020980835,
+      "normalized_score": 1.0,
+      "direction": "negative",
+      "impact_level": "high impact"
+    },
+    {
+      "feature": "alive",
+      "shap_score": -0.05299999937415123,
+      "normalized_score": 0.0,
+      "direction": "negative",
+      "impact_level": "moderate impact"
+    }
+  ],
+  "player_win_probability": 0.04859999939799309,
+  "damage_source_analysis": {
+    "most_common_source": "phantom",
+    "breakdown": [
+      {
+        "source": "phantom",
+        "damage": 1464,
+        "hits": 25,
+        "damage_ratio": 0.548
+      },
+      {
+        "source": "paint-shells",
+        "damage": 481,
+        "hits": 22,
+        "damage_ratio": 0.18
+      },
+      { "source": "vandal", "damage": 331, "hits": 4, "damage_ratio": 0.124 },
+      {
+        "source": "showstopper",
+        "damage": 143,
+        "hits": 2,
+        "damage_ratio": 0.054
+      },
+      { "source": "stinger", "damage": 102, "hits": 5, "damage_ratio": 0.038 },
+      { "source": "sheriff", "damage": 101, "hits": 4, "damage_ratio": 0.038 },
+      { "source": "judge", "damage": 60, "hits": 5, "damage_ratio": 0.022 },
+      { "source": "marshal", "damage": 57, "hits": 2, "damage_ratio": 0.021 },
+      { "source": "frenzy", "damage": 32, "hits": 1, "damage_ratio": 0.012 }
+    ]
+  },
+  "overall_damage_summary": "Most damage dealt to body using phantom. Weapon usage indicates a rifle-heavy playstyle.",
+  "enemy_damage_summary": {
+    "primary_target": "body",
+    "summary": "Relies heavily on precision aiming and headshots | Primarily deals body damage, indicating spray-based engagements"
+  },
+  "damage_target_analysis": {
+    "most_common_target": "body",
+    "breakdown": [
+      { "target": "body", "damage": 1436, "hits": 55, "damage_ratio": 0.537 },
+      { "target": "head", "damage": 1280, "hits": 12, "damage_ratio": 0.479 },
+      { "target": "leg", "damage": 55, "hits": 3, "damage_ratio": 0.021 }
+    ]
+  },
+  "weapon_summary": {
+    "most_common_weapon": "phantom",
+    "weapon_damage_ratio": {
+      "rifle": 0.648,
+      "smg": 0.037,
+      "shotgun": 0.022,
+      "sniper": 0.021,
+      "pistol": 0.048,
+      "ability": 0.225
+    },
+    "summary": "Primary rifler relying heavily on rifles"
+  },
+  "playstyle": {
+    "aim_heavy": "True",
+    "utility_heavy": "False",
+    "rifler": "True"
+  }
+}

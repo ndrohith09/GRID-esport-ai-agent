@@ -1,0 +1,94 @@
+{
+  "index": 0,
+  "series_id": 2819695,
+  "round": 1,
+  "won": 0,
+  "side": "attacker",
+  "score": 13,
+  "team_loadoutValue": 8150,
+  "team_netWorth": 10300,
+  "team_kills": 96,
+  "team_id": 81,
+  "team_name": "MIBR (1)",
+  "player_id": 14,
+  "player_name": "aspas",
+  "participationStatus": "active",
+  "objectives": [
+    {
+      "id": "captureUltimateOrb",
+      "type": "captureUltimateOrb",
+      "completedFirst": true,
+      "completionCount": 5
+    },
+    {
+      "id": "beginDefuseBomb",
+      "type": "beginDefuseBomb",
+      "completedFirst": false,
+      "completionCount": 2
+    },
+    {
+      "id": "defuseBomb",
+      "type": "defuseBomb",
+      "completedFirst": true,
+      "completionCount": 2
+    },
+    {
+      "id": "stopDefuseBomb",
+      "type": "stopDefuseBomb",
+      "completedFirst": false,
+      "completionCount": 2
+    },
+    {
+      "id": "plantBomb",
+      "type": "plantBomb",
+      "completedFirst": false,
+      "completionCount": 4
+    },
+    {
+      "id": "explodeBomb",
+      "type": "explodeBomb",
+      "completedFirst": false,
+      "completionCount": 1
+    }
+  ],
+  "money": 400,
+  "loadoutValue": 1600,
+  "netWorth": 2000,
+  "damageDealtTargets": [
+    { "target": "body", "damageAmount": 1436, "occurrenceCount": 55 },
+    { "target": "head", "damageAmount": 1280, "occurrenceCount": 12 },
+    { "target": "leg", "damageAmount": 55, "occurrenceCount": 3 }
+  ],
+  "damageDealtSources": [
+    { "target": "sheriff", "damageAmount": 101, "occurrenceCount": 4 },
+    { "target": "marshal", "damageAmount": 57, "occurrenceCount": 2 },
+    { "target": "paint-shells", "damageAmount": 481, "occurrenceCount": 22 },
+    { "target": "stinger", "damageAmount": 102, "occurrenceCount": 5 },
+    { "target": "phantom", "damageAmount": 1464, "occurrenceCount": 25 },
+    { "target": "showstopper", "damageAmount": 143, "occurrenceCount": 2 },
+    { "target": "frenzy", "damageAmount": 32, "occurrenceCount": 1 },
+    { "target": "judge", "damageAmount": 60, "occurrenceCount": 5 },
+    { "target": "vandal", "damageAmount": 331, "occurrenceCount": 4 }
+  ],
+  "teamdamageTaken": 0,
+  "teamdamageDealt": 8,
+  "selfdamageTaken": 91,
+  "selfdamageDealt": 91,
+  "damageTaken": 2758,
+  "damageDealt": 2672,
+  "ultimatePoints": 1,
+  "teamkills": 0,
+  "alive": 0,
+  "currentArmor": 0,
+  "currentHealth": 0,
+  "abilities": [
+    { "abilityName": "blast-pack", "charges": 0 },
+    { "abilityName": "paint-shells", "charges": 0 },
+    { "abilityName": "boom-bot", "charges": 1 },
+    { "abilityName": "showstopper", "charges": 0 }
+  ],
+  "character.id": "raze",
+  "inventory.items": "[]",
+  "position.x": 7324.47363,
+  "position.y": -4251.37842
+}

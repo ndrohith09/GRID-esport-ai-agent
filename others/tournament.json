@@ -1,0 +1,325 @@
+{
+  "data": {
+    "tournaments": {
+      "pageInfo": {
+        "hasPreviousPage": false,
+        "hasNextPage": true
+      },
+      "totalCount": 214,
+      "edges": [
+        {
+          "node": {
+            "id": "756907",
+            "name": "LCK - Spring 2024 (Regular Season: Regular Season)",
+            "nameShortened": "Regular Season",
+            "prizePool": {
+              "amount": 289680
+            },
+            "private": false,
+            "venueType": "UNKNOWN",
+            "externalLinks": [
+              {
+                "dataProvider": {
+                  "name": "LOL",
+                  "description": "Riot Esports API"
+                }
+              },
+              {
+                "dataProvider": {
+                  "name": "LOL",
+                  "description": "Riot Esports API"
+                }
+              }
+            ],
+            "titles": [
+              {
+                "id": "3",
+                "name": "League of Legends"
+              }
+            ],
+            "teams": []
+          }
+        },
+        {
+          "node": {
+            "id": "756908",
+            "name": "LCK - Spring 2024 (Playoffs: Playoffs)",
+            "nameShortened": "Playoffs",
+            "prizePool": {
+              "amount": 289680
+            },
+            "private": false,
+            "venueType": "UNKNOWN",
+            "externalLinks": [
+              {
+                "dataProvider": {
+                  "name": "LOL",
+                  "description": "Riot Esports API"
+                }
+              },
+              {
+                "dataProvider": {
+                  "name": "LOL",
+                  "description": "Riot Esports API"
+                }
+              }
+            ],
+            "titles": [
+              {
+                "id": "3",
+                "name": "League of Legends"
+              }
+            ],
+            "teams": []
+          }
+        },
+        {
+          "node": {
+            "id": "756928",
+            "name": "LEC - Winter 2024 (Regular Season: Regular Season)",
+            "nameShortened": "Regular Season",
+            "private": false,
+            "venueType": "UNKNOWN",
+            "externalLinks": [
+              {
+                "dataProvider": {
+                  "name": "LOL",
+                  "description": "Riot Esports API"
+                }
+              },
+              {
+                "dataProvider": {
+                  "name": "LOL",
+                  "description": "Riot Esports API"
+                }
+              }
+            ],
+            "titles": [
+              {
+                "id": "3",
+                "name": "League of Legends"
+              }
+            ],
+            "teams": []
+          }
+        },
+        {
+          "node": {
+            "id": "756935",
+            "name": "LCS - Spring 2024 (Regular Season: Regular Season)",
+            "nameShortened": "Regular Season",
+            "private": false,
+            "venueType": "UNKNOWN",
+            "externalLinks": [
+              {
+                "dataProvider": {
+                  "name": "LOL",
+                  "description": "Riot Esports API"
+                }
+              },
+              {
+                "dataProvider": {
+                  "name": "LOL",
+                  "description": "Riot Esports API"
+                }
+              }
+            ],
+            "titles": [
+              {
+                "id": "3",
+                "name": "League of Legends"
+              }
+            ],
+            "teams": []
+          }
+        },
+        {
+          "node": {
+            "id": "756960",
+            "name": "LPL - Spring 2024 (Regular Season: Regular Season)",
+            "nameShortened": "Regular Season",
+            "private": false,
+            "venueType": "UNKNOWN",
+            "externalLinks": [
+              {
+                "dataProvider": {
+                  "name": "LOL",
+                  "description": "Riot Esports API"
+                }
+              },
+              {
+                "dataProvider": {
+                  "name": "LOL",
+                  "description": "Riot Esports API"
+                }
+              }
+            ],
+            "titles": [
+              {
+                "id": "3",
+                "name": "League of Legends"
+              }
+            ],
+            "teams": []
+          }
+        },
+        {
+          "node": {
+            "id": "756962",
+            "name": "LPL - Spring 2024 (Playoffs: Playoffs)",
+            "nameShortened": "Playoffs",
+            "private": false,
+            "venueType": "UNKNOWN",
+            "externalLinks": [
+              {
+                "dataProvider": {
+                  "name": "LOL",
+                  "description": "Riot Esports API"
+                }
+              },
+              {
+                "dataProvider": {
+                  "name": "LOL",
+                  "description": "Riot Esports API"
+                }
+              }
+            ],
+            "titles": [
+              {
+                "id": "3",
+                "name": "League of Legends"
+              }
+            ],
+            "teams": []
+          }
+        },
+        {
+          "node": {
+            "id": "757068",
+            "name": "LEC - Winter 2024 (Playoffs: Playoffs)",
+            "nameShortened": "Playoffs",
+            "private": false,
+            "venueType": "UNKNOWN",
+            "externalLinks": [
+              {
+                "dataProvider": {
+                  "name": "LOL",
+                  "description": "Riot Esports API"
+                }
+              },
+              {
+                "dataProvider": {
+                  "name": "LOL",
+                  "description": "Riot Esports API"
+                }
+              }
+            ],
+            "titles": [
+              {
+                "id": "3",
+                "name": "League of Legends"
+              }
+            ],
+            "teams": []
+          }
+        },
+        {
+          "node": {
+            "id": "757073",
+            "name": "VCT Americas - Kickoff 2024 (Groups: Group A)",
+            "nameShortened": "Group A",
+            "prizePool": {
+              "amount": 0
+            },
+            "private": false,
+            "venueType": "UNKNOWN",
+            "externalLinks": [
+              {
+                "dataProvider": {
+                  "name": "VALORANT",
+                  "description": "Riot Esports API"
+                }
+              },
+              {
+                "dataProvider": {
+                  "name": "VALORANT",
+                  "description": "Riot Esports API"
+                }
+              }
+            ],
+            "titles": [
+              {
+                "id": "6",
+                "name": "Valorant"
+              }
+            ],
+            "teams": []
+          }
+        },
+        {
+          "node": {
+            "id": "757074",
+            "name": "VCT Americas - Kickoff 2024 (Playoffs: Playoffs)",
+            "nameShortened": "Playoffs",
+            "prizePool": {
+              "amount": 0
+            },
+            "private": false,
+            "venueType": "UNKNOWN",
+            "externalLinks": [
+              {
+                "dataProvider": {
+                  "name": "VALORANT",
+                  "description": "Riot Esports API"
+                }
+              },
+              {
+                "dataProvider": {
+                  "name": "VALORANT",
+                  "description": "Riot Esports API"
+                }
+              }
+            ],
+            "titles": [
+              {
+                "id": "6",
+                "name": "Valorant"
+              }
+            ],
+            "teams": []
+          }
+        },
+        {
+          "node": {
+            "id": "757087",
+            "name": "LCS - Spring 2024 (Playoffs: Playoffs)",
+            "nameShortened": "Playoffs",
+            "private": false,
+            "venueType": "UNKNOWN",
+            "externalLinks": [
+              {
+                "dataProvider": {
+                  "name": "LOL",
+                  "description": "Riot Esports API"
+                }
+              },
+              {
+                "dataProvider": {
+                  "name": "LOL",
+                  "description": "Riot Esports API"
+                }
+              }
+            ],
+            "titles": [
+              {
+                "id": "3",
+                "name": "League of Legends"
+              }
+            ],
+            "teams": []
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root {
+  height: 100%;
+}
+
+/* Remove default blue colors and rounded corners */
+.custom-tabs-container .ant-tabs-tab {
+  @apply transition-all duration-200 border-b-2 border-transparent;
+  padding: 12px 16px !important;
+  margin: 0 !important;
+}
+
+.custom-tabs-container .ant-tabs-tab-active {
+  @apply border-b-black bg-gray-50/50;
+}
+
+.custom-tabs-container .ant-tabs-tab:hover {
+  @apply text-black bg-gray-50;
+}
+
+.custom-tabs-container .ant-tabs-tab-active .ant-tabs-tab-btn {
+  @apply text-black;
+}
+
+.custom-tabs-container .ant-tabs-ink-bar {
+  @apply bg-black h-[3px]; /* Bold black underline */
+}
+
+.custom-tabs-container .ant-tabs-nav::before {
+  @apply border-gray-100; /* Light bottom border for the whole bar */
+}

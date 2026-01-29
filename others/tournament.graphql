@@ -1,0 +1,41 @@
+query GetTournament {
+  tournament(id: "1") {
+    ...tournamentFields
+  }
+}
+query GetTournaments {  
+  tournaments {
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+      startCursor
+      endCursor
+    }
+    totalCount
+    edges {
+      cursor
+      node {
+        ...tournamentFields
+      }
+    }
+  }
+}
+fragment tournamentFields on Tournament {
+  id
+  name
+  nameShortened
+  startDate
+  endDate
+  prizePool{
+    amount
+  }   
+  venueType
+  titles{
+    id
+    name
+  }
+  teams{
+    name
+    id
+  }
+}

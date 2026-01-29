@@ -1,0 +1,195 @@
+# (1) team statistics for last 3 months
+query TeamStatisticsForLastThreeMonths {
+  teamStatistics(teamId: "99", filter: { timeWindow: LAST_3_MONTHS }) {
+    id
+    aggregationSeriesIds
+    series {
+      count
+      kills {
+        sum
+        min
+        max
+        avg
+      }
+    }
+    game {
+      count
+      netWorth{
+        sum
+      } 
+      kills {
+        sum
+        min
+        max
+      }
+      inventoryValue {
+        sum
+        min
+      }
+      killAssistsGiven {
+        sum
+      }
+      players {
+        characters { 
+          count
+          character{
+            id
+            name
+          }
+          percentage
+        }
+      } 
+      
+      objectives{
+        type 
+        completionCount{
+          sum
+        }        
+      }
+      score {
+        sum
+        min
+      }
+      won {
+        value
+        count
+        percentage
+        streak {
+          min
+          max
+          current
+        }
+      }
+    }    
+    segment {
+      type      
+      count
+      deaths {
+        sum
+        min
+        max
+        avg
+      }
+    }
+  }
+}
+# (2) team statistics for chosen tournaments
+query TeamStatisticsForChosenTournaments {
+  teamStatistics(teamId: "99", filter: { tournamentIds: { in: ["757073", "757073"] } }) {
+    id
+    aggregationSeriesIds
+    series {
+      count
+      kills {
+        sum
+        min
+        max
+        avg
+      }
+    }
+    game {
+      count
+      wins {
+        value
+        count
+        percentage
+        streak {
+          min
+          max
+          current
+        }
+      }
+    }
+    segment {
+      type
+      count
+      deaths {
+        sum
+        min
+        max
+        avg
+      }
+    }
+  }
+}
+# (3) player statistics for last 3 months
+query PlayerStatisticsForLastThreeMonths {
+  playerStatistics(playerId: "244", filter: { timeWindow: LAST_3_MONTHS }) {
+    id
+    aggregationSeriesIds
+    series {
+      count
+      kills {
+        sum
+        min
+        max
+        avg
+      }
+    }
+    game {
+      count
+      wins {
+        value
+        count
+        percentage
+        streak {
+          min
+          max
+          current
+        }
+      }
+    }
+    segment {
+      type
+      count
+      deaths {
+        sum
+        min
+        max
+        avg
+      }
+    }
+  }
+}
+# (4) player statistics for chosen tournaments
+query PlayerStatisticsForChosenTournaments {
+  playerStatistics(
+    playerId: "244"
+    filter: { tournamentIds: { in: ["1", "2"] } }
+  ) {
+    id
+    aggregationSeriesIds
+    series {
+      count
+      kills {
+        sum
+        min
+        max
+        avg
+      }
+    }
+    game {
+      count
+      wins {
+        value
+        count
+        percentage
+        streak {
+          min
+          max
+          current
+        }
+      }
+    }
+    segment {
+      type
+      count
+      deaths {
+        sum
+        min
+        max
+        avg
+      }
+    }
+  }
+}

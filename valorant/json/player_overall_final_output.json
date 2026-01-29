@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "player_id": 14,
+    "series_id": 2819695,
+    "rounds_played": 2,
+    "rounds_won": 0,
+    "rounds_lost": 2
+  },
+  "series_strengths": [
+    {
+      "feature": "damage_efficiency",
+      "mean_shap": 0.6944999694824219,
+      "direction": "positive",
+      "impact_level": "high",
+      "consistency": 5.0995001792907715
+    },
+    {
+      "feature": "shotgun_damage_ratio",
+      "mean_shap": 0.09600000083446503,
+      "direction": "positive",
+      "impact_level": "low",
+      "consistency": 0.006999999284744263
+    }
+  ],
+  "series_weaknesses": [
+    {
+      "feature": "body_damage_ratio",
+      "mean_shap": -0.16300000250339508,
+      "direction": "negative",
+      "impact_level": "moderate",
+      "consistency": 0.012999996542930603
+    },
+    {
+      "feature": "alive",
+      "mean_shap": -0.06600000150501728,
+      "direction": "negative",
+      "impact_level": "low",
+      "consistency": 0.01300000213086605
+    },
+    {
+      "feature": "headshot_damage_ratio",
+      "mean_shap": -0.057999998331069946,
+      "direction": "negative",
+      "impact_level": "low",
+      "consistency": 0.0
+    }
+  ],
+  "win_probability": {
+    "mean": 0.12875000201165676,
+    "median": 0.12875000201165676,
+    "min": 0.04859999939799309,
+    "max": 0.20890000462532043,
+    "stability": 0.9198499973863363
+  },
+  "economy_profile": {
+    "player_loadout_ratio": 0.192,
+    "player_networth_ratio": 0.194,
+    "money_left_ratio": 0.403
+  },
+  "eco_summary": {
+    "summary": "Player is an economy-balanced contributor, contributing 19% of team firepower. They conserves credits well.",
+    "labels": {
+      "investment_style": "economy-balanced contributor",
+      "credit_discipline": "conserves credits well"
+    }
+  },
+  "weapon_profile": {
+    "most_common_weapon": "rifle",
+    "weapon_damage_ratio": {
+      "rifle": 0.448,
+      "smg": 0.0,
+      "shotgun": 0.0,
+      "sniper": 0.247,
+      "pistol": 0.084,
+      "ability": 0.221
+    },
+    "weapon_usage_ratio": {
+      "rifle": 0.548,
+      "smg": 0.018,
+      "shotgun": 0.011,
+      "sniper": 0.134,
+      "pistol": 0.066,
+      "ability": 0.223
+    },
+    "summary": "Primary rifle relying heavily on rifles"
+  },
+  "playstyle": "aim_heavy",
+  "payer_consistency_score": 0.6700167504187605
+}
