@@ -3,8 +3,12 @@
 [TODO] Teams -> players (that game stats)
 Games -> player (overall stats can be find)
 
+Game Simulation
+
 dashboard player -> overall player
 series -> team report -> player report (overall, round report)
+
+Expected Results of next match
 
 ### Top Teams (6)
 
