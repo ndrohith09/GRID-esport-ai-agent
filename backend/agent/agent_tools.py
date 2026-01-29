@@ -75,7 +75,7 @@ class PromptAnalyzerTool(BaseTool):
 
     def _run(self, **kwargs) -> t.Tuple[dict, dict]:
         try:
-            search = kwargs.get("search", None) #These parameters are dynamic and are passed by llm based on user input prompt
+            increment = kwargs.get("increment", None) #These parameters are dynamic and are passed by llm based on user input prompt
             player_output = self.meta['configurable']["player_output"] #thread_config from `def get_players():`
             #TODO : Perform the calculation and return
             build_str = f"""Authentication Successful. Displaying User details: \nEmail"""
