@@ -3,6 +3,10 @@
 
 [TODO] Monte Carlo (10k simulations) - pdf report generation
 
+Prompts
+- what is team_id:79 strengths?
+- "what-if teamA_id:79 vs teamB_id:97 plays? compute the win probability"
+
 ### Top Teams (6)
 
 97      7
@@ -65,6 +69,20 @@ series_id, player_id, sequence number, stats
 
 Weapon Entropy = -Σ(p_i * log(p_i))
 
+----
+
+what happens when team_id:79 plays next match? What are the chances of winning the match? - Based on the Monte Carlo simulation, Team A (ID 79) has a **39.1%** chance of winning, while Team B (ID 97) has a **60.9%** chance of winning. Team A’s win probability ranges from about **18.5% to 62.4%** across simulated scenarios.
+
+what-if player_id:10612 player_name:aspas plays with player_id:297 player_name:vecna? Who will win? - Based on the simulation, Vecna (player_id: 297) has a much higher probability of winning—about **98%**, while Aspas (player_id: 10612) has only around **2%**. So, Vecna is overwhelmingly likely to win in this matchup
+
+what-if teamA_id:79 vs teamB_id:97 plays? compute the win probability - If team **ID 79** plays its next match, the Monte Carlo simulation estimates a **56.0% chance of winning**. On average, the team is expected to have about **180 kills** and **184 deaths**, with a mean kill difference of **-4.2**.
+
+what are the chances of winning the match if player_id:10612 plays next match? - If player **ID 10612** plays the next match, the estimated chance of winning is approximately **1.29%**. The Monte Carlo simulation shows a mean probability of **0.0128**, with a 90% confidence range between **1.23%** and **1.34%**, indicating no significant change from the baseline scenario
+
+
+Provide me weapon analysis of the player_id:10612 from series_id:2843069 - **Weapon Analysis for Player 10612 (Series 2843069):**\n\n- **Primary Weapon:** Rifle  \n  - **Usage Ratio:** 73.7%  \n  - **Damage Contribution:** 69.8%  \n  - **Summary:** The player relies heavily on rifles as their main weapon, consistent with an aim-heavy playstyle.\n\n- **Secondary Weapons:**\n  - **Pistol:** 13.8% usage, 8% damage contribution — effective in pistol rounds but limited overall impact.\n  - **SMG:** 12.5% usage, 4.3% damage contribution — situational use, low damage efficiency.\n  - **Shotgun/Sniper/Ability:** No recorded usage or damage.\n\n- **Strengths:**\n  - **Pistol Damage Ratio:** Slightly positive impact, showing competence in pistol rounds.\n  - **Headshot Damage Ratio:** Low but positive influence, aligning with aim-heavy tendencies.\n\n- **Weaknesses:**\n  - **Damage Efficiency:** Major negative impact — suggests poor conversion of shots into effective damage.\n  - **Body and Leg Damage Ratios:** Low impact and consistency, indicating suboptimal shot placement.\n\n**Overall Assessment:**  \nPlayer 10612 is a rifle-focused, aim-heavy player with disciplined credit management. However, their damage efficiency and round survival are weak points, limiting their overall effectiveness despite strong rifle reliance.
+
+----
 
 DEFAULT_SYSTEM_PROMPT = """
  You are an esports analytics agent specialized in Valorant match prediction, performance explanation, and scenario simulation.

@@ -14,7 +14,7 @@ from langchain_openai import AzureChatOpenAI
 from config.settings import AZURE_OPENAI_ENDPOINT,AZURE_OPENAI_API_KEY,OPENAI_API_VERSION,AZURE_DEPLOYMENT
 from datetime import datetime
 import pytz
-from .agent_tools import GetPlayerSeriesDataTool, GetPlayerRoundDataTool, GetTeamOverallDataTool, GetTeamSeriesDataTool
+from .agent_tools import PlayerProbabilityMonteCarloTool, GetPlayerVsPlayerMonteCarloTool, TeamVsTeamMonteCarloTool, TeamProbabilityMonteCarloTool, GetPlayerSeriesDataTool, GetPlayerRoundDataTool, GetTeamOverallDataTool, GetTeamSeriesDataTool
 
 ###Define Graph State
 class AgentStateSchema(TypedDict):
@@ -135,6 +135,32 @@ You are equipped with this set of tools and granted high privileges. Use can inv
 - TEAM_VS_TEAM_PROBABILITY : Tool for handling **only Team A vs Team B and returns win probability output.** Handles queries related only to prediction of two teams win probability
 - TEAM_PROBABILITY : Use this tool **only to estimate team's win probability distribution.**
 
+### Scenario to invoke tools
+- TEAM_VS_TEAM_PROBABILITY: Use this tool when user prompts **what-if** and provides **team_id** vs **team_id** and asks to compute win probability between two teams. **Don't invoke** GET_TEAM_SERIES_DATA, GET_TEAM_OVERALL_DATA when **two teams** are asked to compare their win probability.
+(eg. what-if team_id:79 vs team_id:97 plays? compute the win probability.)
+
+- PLAYER_VS_PLAYER_PROBABILITY: Use this tool when user prompts **what-if** and provides **player_id** vs **player_id** and asks to compute win probability between two players. **Don't invoke** GET_PLAYER_SERIES_DATA, GET_PLAYER_ROUND_DATA when **two players** are asked to compare their win probability.
+(eg. what-if player_id:10612 plays with player_id:297? Who will win?)
+
+- TEAM_PROBABILITY: Use this tool when user prompts **what-if** and provides **team_id** and asks to compute win probability of team in next match.
+(eg. what-if team_id:79 plays next match? What are the chances of winning the match?)
+
+- PLAYER_PROBABILITY: Use this tool when user prompts **what-if** and provides **team_id** and asks to compute player win probability for next match.
+(eg. what are the chances of winning the match if player_id:297 plays next match?)
+
+- GET_PLAYER_SERIES_DATA: Use this tool when users provides **player_id** & **series_id** and asks to **analyse the player stats in that SERIES**.
+(eg. Provide me weapon analysis of the player_id:10612 from series_id:2843069. )
+
+- GET_PLAYER_ROUND_DATA: Use this tool when users provides **player_id**, **series_id** & **round_id** and asks to **analyse the player ROUND stats in that SERIES.
+(eg. Give me round_id:1 analysis of the player_id:10612 from series_id:2843069. )
+
+
+- GET_TEAM_SERIES_DATA: Use this tool when users provides **team_id** & **series_id**  and asks to **analyse the team's stats in that SERIES**.
+(eg. Analyse the team_id:79 stats of series_id:2843069. )
+
+- GET_TEAM_OVERALL_DATA: Use this tool when users provides **team_id** and asks to **analyse the team's OVERALL stats of all the SERIES played**.
+(eg. Give me an overall analysis of that team_id:79 )
+
 ### Instructions
 - Your are granted high previleges access and can invoke tools automatically without permission. **Strictly don't ask user for permission to invoke the tool call**
 - Monte Carlo or probability outputs are authoritative. If Monte Carlo returns a distribution, do not override it.
@@ -168,7 +194,17 @@ Your response should be a concise and clear answer to the user's query based on 
         system_prompt = system_prompt.replace("{{REPLACE_WITH_CURRENT_DAY_OF_WEEK}}",str(datetime.now(pytz.timezone("UTC")).strftime("%A")),)
         system_prompt = SystemMessage(system_prompt)
 
-        toolkits = [ GetPlayerSeriesDataTool(meta=thread_config), GetPlayerRoundDataTool(meta=thread_config), GetTeamOverallDataTool(meta=thread_config), GetTeamSeriesDataTool(meta=thread_config) ]
+        toolkits = [ 
+            GetPlayerSeriesDataTool(meta=thread_config), 
+            GetPlayerRoundDataTool(meta=thread_config), 
+            GetTeamOverallDataTool(meta=thread_config), 
+            GetTeamSeriesDataTool(meta=thread_config),
+            TeamProbabilityMonteCarloTool(meta=thread_config),
+            TeamVsTeamMonteCarloTool(meta=thread_config),
+            GetPlayerVsPlayerMonteCarloTool(meta=thread_config),
+            PlayerProbabilityMonteCarloTool(meta=thread_config), 
+            
+            ]
         response_model = model
         model = model.bind_tools(toolkits)
         tools_by_name = {tool.name: tool for tool in toolkits}

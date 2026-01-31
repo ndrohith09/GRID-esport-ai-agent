@@ -343,10 +343,9 @@ class PlayerProbabilityMonteCarloTool(BaseTool):
     def _run(self, **kwargs) -> t.Tuple[dict, dict]:
         try:
             player_id = kwargs.get('player_id') 
-            simulator_params = kwargs.get('simulator_params') 
+            simulator_params = kwargs.get('simulator_params', {}) 
              # Step 1: find latest series
             series_id = get_series_id_of_player(player_id)
-
             # Step 2: fetch player JSON
             player_json = PlayerPredictions().overall_player_series_classifier_model_output(
                 player_id=player_id,
@@ -356,7 +355,7 @@ class PlayerProbabilityMonteCarloTool(BaseTool):
             # Step 3: Monte Carlo simulation
             player_mc = PlayerMonteCarloPredictions().monte_carlo_player_win_probability(
                 player_json,
-                simulator_params
+                {}
             )
             build_str = f"""Monte Carlo simulation completed successfully: \n Monte Carlo Output (mc):\n {json.dumps(player_mc, indent=2)}"""
             return build_str, {}
@@ -372,7 +371,8 @@ class PlayerVsPlayerMonteCarloRequest(BaseModel):
 
 class GetPlayerVsPlayerMonteCarloTool(BaseTool):
     """
-        Tool for handling **only Player A vs Player B and returns win probability output.** Handles queries related only to prediction of two players win probability
+        Tool for handling **only Player A vs Player B and returns win probability output.** Handles queries related only to prediction of two players win probability.
+        eg. what-if player_id:10612 plays with player_id:297? Who will win?
     """
     # """
     # Runs Monte Carlo simulation for Player A vs Player B win probability using
@@ -576,10 +576,10 @@ class TeamProbabilityMonteCarloTool(BaseTool):
     def _run(self, **kwargs) -> t.Tuple[dict, dict]:
         try:
             team_id = kwargs.get('team_id') 
-            simulator_params = kwargs.get('simulator_params')  
+            simulator_params = kwargs.get('simulator_params', {})  
 
             teamA_json = TeamPredictions().overall_team_classifier_model_output(team_id)
-            team_mc = TeamMonteCarloPredictions().simulate_team_win_probability(teamA_json, params=simulator_params)
+            team_mc = TeamMonteCarloPredictions().simulate_team_win_probability(teamA_json, params={})
         
  
             build_str = f"""Team Monte Carlo simulation completed successfully: \n Monte Carlo Output (mc):\n {json.dumps(team_mc, indent=2)}"""
