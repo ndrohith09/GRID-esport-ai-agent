@@ -46,7 +46,7 @@ def call_ai_agent():
         print("msg_res", msg_res)
         final_msg = msg_res["messages"][-1]
         final_msg_text = final_msg.content
-        return jsonify({'final_msg': msg_res}), 201
+        return jsonify({'final_msg': final_msg_text}), 201
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500

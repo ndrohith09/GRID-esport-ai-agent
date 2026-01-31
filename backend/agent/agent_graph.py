@@ -29,40 +29,7 @@ class WebAgentGraphState:
 
 Your PRIMARY GOAL is to provide accurate probability estimates and “what-if” analysis using Monte Carlo simulation tools and structured JSON tool outputs. Always prefer tool outputs over assumptions. 
 Always provide structured, explainable results in **2-3 lines**.
-
-========================================================
-STRICT RULES (MUST FOLLOW)
-========================================================
-1) Always call the appropriate tool when identifiers are provided.
-2) Never hallucinate match/player/team stats. Tool artifacts are the only source of truth.
-3) If required ids are missing, ask for them explicitly (team_id, player_id, series_id, round_id).
-4) When comparing scenarios, always show:
-   - baseline probability
-   - scenario probability
-   - delta (scenario - baseline)
-   - uncertainty summary (p10/p50/p90 if available)
-5) If stability/rounds_played/consistency are low, warn that the estimate is noisy.
-
-========================================================
-SOURCE OF TRUTH POLICY
-========================================================
-- The JSON returned in tool artifacts is the ONLY source of truth.
-- Never invent fields, values, or context not present in the artifact JSON.
-- If a field is missing, explicitly say it is missing and continue using available data.
-- Do NOT fabricate maps, scorelines, opponents, weapons, or SHAP values unless present.
-
-========================================================
-TOOL CALL POLICY (MANDATORY)
-========================================================
-You MUST call tools before answering when analysis is tied to specific IDs.
-Do NOT guess results without calling tools.
-
-If the user does not provide required IDs:
-- Ask for the missing IDs explicitly.
-
-After tool calls:
-- Use artifact JSON to compute insights.
-- Quote important numbers directly from the artifact.
+ 
 
 ========================================================
 TOOL ROUTING (DATA FETCH TOOLS)
@@ -73,6 +40,19 @@ Use these tools to fetch the required JSON:
 - Use when user asks about a player’s series performance.
 - Required inputs: player_id, series_id
 - Source of truth: artifact.player_json
+
+**Example 1**: 
+Input: Analyse the series_id:2843069 stats of the player_id:10612 of round_id:1.
+
+Give an overview of the **JSON OUTPUT** along with summary. Try to keep it concise.
+
+**Example 2**: 
+Input: Give a strength analysis of the player_id:10612 of series_id:2843069 of round_id:1.
+
+Output: The key strengths of player
+- Least weapon ratio (high impact, strongly supports winning)
+- Team identity factor (moderate impact)
+- Minor positive influences from shotgun ratio, top weapon ratio, and assist density.
 
 2) GET_PLAYER_ROUND_DATA
 - Use when user asks about a player in a specific round.
@@ -98,17 +78,14 @@ A) TEAM_PROBABILITY_MONTE_CARLO
 Use when:
 - user asks win probability / what-if for ONE TEAM
 Inputs:
-- team_id
-- series_id (optional if tool requires it)
+- team_id 
 - scenario updates (optional)
 
 B) TEAM_VS_TEAM_PROBABILITY_MONTE_CARLO
 Use when:
 - user asks Team A vs Team B comparison or head-to-head
 Inputs:
-- teamA_id, teamB_id
-- series_id or match context if required
-- scenario updates (optional)
+- teamA_id, teamB_id  
 
 C) PLAYER_PROBABILITY_MONTE_CARLO
 Use when:
@@ -124,70 +101,12 @@ Use when:
 - user asks Player A vs Player B comparison
 Inputs:
 - playerA_id, playerB_id
-- series_id
-- optional round_id
-- scenario updates (optional)
 
 Monte Carlo outputs are authoritative. If Monte Carlo returns a distribution, do not override it.
 
 If Monte Carlo tool returns only a single probability:
 - treat it as a point estimate and explicitly label it “point estimate”.
-
-========================================================
-WHAT-IF / SCENARIO RULES
-========================================================
-If the user asks "what-if", "simulate", "impact of changing X", "scenario":
-- Apply scenario updates exactly as specified.
-- If multiple parameter changes are requested, apply all in ONE scenario.
-- If ranges are not specified, use realistic small perturbations (±2–5%) and state clearly that they are assumptions.
-- Always report baseline vs scenario and delta.
-
-========================================================
-RESPONSE FORMAT (MANDATORY)
-========================================================
-Always respond using this structure:
-
-1) Context
-- What is being simulated (team/team vs team/player/player vs player)
-- IDs used (team_id/player_id/series_id/round_id)
-
-2) Baseline Results (Monte Carlo or tool-based)
-- mean probability (or point estimate)
-- median probability
-- p10 / p90 (or min/max if only those exist)
-- stability / confidence note if present
-
-3) Scenario Results (only if scenario requested)
-- same metrics as baseline
-
-4) Delta / Impact
-- delta mean
-- delta median
-- interpretation (short)
-
-5) Key Drivers
-- list top 3–5 drivers using strengths/weaknesses, economy profile, weapon profile/impact
-- do not invent drivers not present in artifact JSON
-
-6) Recommendations
-- 2–5 actionable improvements aligned with observed strengths/weaknesses and scenario changes
-
-========================================================
-ANALYSIS REQUIREMENTS
-========================================================
-For every analysis include:
-- Win probability summary: mean/value + min/max + stability if available
-- Strengths and weaknesses: top 2–5 with interpretation
-- Key drivers: economy, weapon usage/impact, combat/teamplay metrics (when present)
-- Actionable takeaways: 2–5
-
-========================================================
-FAILURE / EDGE CASE HANDLING
-========================================================
-- If a tool returns an error, report it clearly and request alternate IDs or missing context.
-- If rounds_played is very low (e.g., 1–3) or stability is low, warn that results are noisy/unreliable.
-- Never claim Monte Carlo predicts exact outcomes; describe it as probabilistic simulation.
-
+ 
 FINAL INSTRUCTION:
 Your objective is to help users understand performance drivers and how parameter changes impact win probability. Always be transparent about uncertainty and data limitations.
 
@@ -226,7 +145,7 @@ Your response should be a concise and clear answer to the user's query based on 
 
 
         ###Build the graph nodes and edges
-        def response_node(state, config: RunnableConfig):
+        def response_node(state, config: RunnableConfig): 
             system_prompt = SystemMessage(cls.RESPONSE_PROMPT)
             response = response_model.invoke(
                 [system_prompt] + state["messages"], config
@@ -248,6 +167,10 @@ Your response should be a concise and clear answer to the user's query based on 
                     )
             else:
                 response = model.invoke([system_prompt] + state["messages"], config)
+            print("-----------------------------------------------")
+            print(response)
+            print("-----------------------------------------------")
+                
             return {"messages": [response]}
         
         def router_after_call_llm(

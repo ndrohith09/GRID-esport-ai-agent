@@ -21,7 +21,6 @@ class GetPlayerSeriesDataRequest(BaseModel):
     player_id: int = Field(..., description="Player ID")
     series_id: int = Field(..., description="Series ID")
 
-
 class GetPlayerSeriesDataTool(BaseTool):
     """
 TOOL: **GET_PLAYER_SERIES_DATA**
@@ -81,6 +80,7 @@ If user asks **"what-if"**:
         except Exception as e:
             return f"Authentication Tool Execution Failed: {str(e)}", {}
 
+
 """=====================Player Round Data=================="""
 
 class GetPlayerRoundDataRequest(BaseModel):
@@ -126,6 +126,7 @@ If user asks **"what-if"**:
 
     response_format: str = "content_and_artifact"
     return_direct: bool = True
+    meta: t.List = {}
 
     def __init__(self,meta:dict={}):
         super().__init__()
@@ -193,6 +194,7 @@ If user asks **"what-if"**:
 
     response_format: str = "content_and_artifact"
     return_direct: bool = True
+    meta: t.List = {}
 
     def __init__(self,meta:dict={}):
         super().__init__()
@@ -251,6 +253,7 @@ class GetTeamSeriesDataTool(BaseTool):
 
     response_format: str = "content_and_artifact"
     return_direct: bool = True
+    meta: t.List = {}
 
     def __init__(self,meta:dict={}):
         super().__init__()
@@ -312,7 +315,7 @@ class PlayerProbabilityMonteCarloTool(BaseTool):
 
     response_format: str = "content_and_artifact"
     return_direct: bool = True
-
+    meta: t.List = {}
 
     def __init__(self,meta:dict={}):
         super().__init__()
@@ -378,6 +381,7 @@ class GetPlayerVsPlayerMonteCarloTool(BaseTool):
 
     response_format: str = "content_and_artifact"
     return_direct: bool = True
+    meta: t.List = {}
 
     def __init__(self,meta:dict={}):
         super().__init__()
@@ -440,14 +444,34 @@ class TeamVsTeamMonteCarloTool(BaseTool):
     """
 
     name: str = "TEAM_VS_TEAM_PROBABILITY_MONTE_CARLO"
-    description: str = (
-        "Run Monte Carlo simulation for Team A vs Team B using overall team JSON outputs. "
-        "Inputs: teamA_id, teamB_id, optional n. Returns win probability results."
-    )
+    description: str = '''
+ Runs a Monte Carlo simulation for Team A vs Team B and returns win probability output.
+
+    TOOL: **TEAM_VS_TEAM_PROBABILITY_MONTE_CARLO**
+
+    Use this tool when the user asks:
+    - "Team A vs Team B win probability"
+    - "predict winner between two teams"
+    - "monte carlo simulation for match"
+    - "what are the odds of A beating B?"
+
+    Instructions after tool call:
+    - Use artifact.simulation as the source of truth.
+    - Report win probabilities clearly:
+    - Team A win %
+    - Team B win %
+    - uncertainty / CI if present
+    - Provide short reasoning based on:
+    - win_probability
+    - combat_metrics
+    - teamplay_metrics
+    - weapon_analysis
+'''
     args_schema: t.Type[BaseModel] = TeamVsTeamMonteCarloRequest
 
     response_format: str = "content_and_artifact"
     return_direct: bool = True
+    meta: t.List = {}
 
     def __init__(self,meta:dict={}):
         super().__init__()
@@ -464,7 +488,7 @@ class TeamVsTeamMonteCarloTool(BaseTool):
 
             # monte carlo simulate match
             team_mc = TeamMonteCarloPredictions().simulate_match(teamA_json, teamB_json)
- 
+            print("----->", team_mc)
             build_str = f"""Monte Carlo Team-vs-Team simulation complete: \n Monte Carlo Output (mc):\n {json.dumps(team_mc, indent=2)}"""
             return build_str, {}
         except Exception as e:
@@ -508,7 +532,7 @@ After tool call:
 
     response_format: str = "content_and_artifact"
     return_direct: bool = True
-
+    meta: t.List = {}
 
     def __init__(self,meta:dict={}):
         super().__init__()
