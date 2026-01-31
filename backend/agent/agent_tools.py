@@ -23,41 +23,45 @@ class GetPlayerSeriesDataRequest(BaseModel):
 
 class GetPlayerSeriesDataTool(BaseTool):
     """
-TOOL: **GET_PLAYER_SERIES_DATA**
-
-When the user requests player analysis for a specific series, call **GET_PLAYER_SERIES_DATA** with:
-- player_id
-- series_id
-
-After calling the tool:
-- Use artifact.player_json as the only source of truth.
-- Do NOT hallucinate fields not present in the JSON.
-- Summarize the player’s series performance using these keys when present:
-  - meta (rounds_played, rounds_won, rounds_lost)
-  - win_probability (mean, median, min, max, stability)
-  - economy_profile
-  - weapon_profile
-  - playstyle
-  - payer_consistency_score
-  - series_strengths and series_weaknesses (mean_shap)
-
-Output format:
-1) Player Overview (player_id, series_id, rounds)
-2) Win Probability Summary (mean + stability)
-3) Strengths (top 2-5)
-4) Weaknesses (top 2-5)
-5) Economy & Weapon Profile summary
-6) Key recommendations (2-4 bullets)
-
-If user asks **"what-if"**:
-- modify requested parameters and recompute win probability using surrogate model.
-- show baseline vs scenario win probability and delta.
+        Tool for handling queries related **only to analysis of a specific SERIES**. Takes player_id and series_id as input and performs the analysis based on user query
     """
+#     """
+# TOOL: **GET_PLAYER_SERIES_DATA**
+
+# When the user requests player analysis for a specific series, call **GET_PLAYER_SERIES_DATA** with:
+# - player_id
+# - series_id
+
+# After calling the tool:
+# - Use artifact.player_json as the only source of truth.
+# - Do NOT hallucinate fields not present in the JSON.
+# - Summarize the player’s series performance using these keys when present:
+#   - meta (rounds_played, rounds_won, rounds_lost)
+#   - win_probability (mean, median, min, max, stability)
+#   - economy_profile
+#   - weapon_profile
+#   - playstyle
+#   - payer_consistency_score
+#   - series_strengths and series_weaknesses (mean_shap)
+
+# Output format:
+# 1) Player Overview (player_id, series_id, rounds)
+# 2) Win Probability Summary (mean + stability)
+# 3) Strengths (top 2-5)
+# 4) Weaknesses (top 2-5)
+# 5) Economy & Weapon Profile summary
+# 6) Key recommendations (2-4 bullets)
+
+# If user asks **"what-if"**:
+# - modify requested parameters and recompute win probability using surrogate model.
+# - show baseline vs scenario win probability and delta.
+# """
 
     name: str = "GET_PLAYER_SERIES_DATA"
     description: str = (
-        "Fetch player series prediction JSON for given player_id and series_id. "
-        "Returns both readable text and the raw JSON artifact."
+        # "Fetch player series prediction JSON for given player_id and series_id. "
+        # "Returns both readable text and the raw JSON artifact."
+        "Tool for handling queries related **only to analysis of a specific SERIES**. Takes player_id and series_id as input and performs the analysis based on user query"
     )
     args_schema:t.Type[BaseModel] = GetPlayerSeriesDataRequest
     return_direct: bool = True
@@ -92,36 +96,42 @@ class GetPlayerRoundDataRequest(BaseModel):
  
 class GetPlayerRoundDataTool(BaseTool):
     """
-TOOL: **GET_PLAYER_ROUND_DATA**
-
-When the user requests player analysis for a specific round, call **GET_PLAYER_ROUND_DATA** with:
-- player_id
-- series_id
-- round_id
-
-After calling the tool:
-- Use artifact.round_json as the only source of truth.
-- Do NOT invent fields.
-
-Output format:
-1) Round Context (player_id, series_id, round_id)
-2) Round Outcome & Win Probability (if present)
-3) Key Drivers (strengths/weaknesses or SHAP signals if present)
-4) Economy/Weapon notes (if present)
-5) What changed vs expected? (short reasoning)
-6) Improvement tips (2-3 bullets)
-
-If user asks **"what-if"**:
-- simulate small modifications to economy/weapon usage/consistency
-- compute updated win probability using surrogate model
-- show baseline vs scenario.
+        Tool for handling queries related **only to analysis of a specific ROUND**. Takes player_id, series_id and round_id as input and performs the analysis based on user query
     """
+#     """
+# TOOL: **GET_PLAYER_ROUND_DATA**
+
+# When the user requests player analysis for a specific round, call **GET_PLAYER_ROUND_DATA** with:
+# - player_id
+# - series_id
+# - round_id
+
+# After calling the tool:
+# - Use artifact.round_json as the only source of truth.
+# - Do NOT invent fields.
+
+# Output format:
+# 1) Round Context (player_id, series_id, round_id)
+# 2) Round Outcome & Win Probability (if present)
+# 3) Key Drivers (strengths/weaknesses or SHAP signals if present)
+# 4) Economy/Weapon notes (if present)
+# 5) What changed vs expected? (short reasoning)
+# 6) Improvement tips (2-3 bullets)
+
+# If user asks **"what-if"**:
+# - simulate small modifications to economy/weapon usage/consistency
+# - compute updated win probability using surrogate model
+# - show baseline vs scenario.
+#     """
 
     name: str = "GET_PLAYER_ROUND_DATA"
     description: str = (
-        "Fetch player round prediction JSON for given player_id, series_id and round_id. "
-        "Returns both readable text and raw JSON artifact."
+        "Tool for handling queries related **only to analysis of a specific round**. Takes player_id, series_id and round_id as input and performs the analysis based on user query"
     )
+    # description: str = (
+    #     "Fetch player round prediction JSON for given player_id, series_id and round_id. "
+    #     "Returns both readable text and raw JSON artifact."
+    # )
     args_schema: t.Type[BaseModel] = GetPlayerRoundDataRequest
 
     response_format: str = "content_and_artifact"
@@ -154,42 +164,48 @@ class GetTeamOverallDataRequest(BaseModel):
 
 class GetTeamOverallDataTool(BaseTool):
     """
-TOOL: **GET_TEAM_OVERALL_DATA**
-
-When the user requests overall team strength / season-level analysis, call **GET_TEAM_OVERALL_DATA** with required ids.
-
-After calling the tool:
-- Use artifact.team_json as the only source of truth.
-- Summarize the team’s overall strength using:
-  - win_probability
-  - team_strength_score
-  - combat_metrics
-  - teamplay_metrics
-  - weapon_analysis
-  - overall_weapon_win_impact
-  - strengths and weaknesses
-
-Output format:
-1) Team Overview (team_id, series_count if present)
-2) Win Probability + Team Strength Score
-3) Combat Summary (kills/deaths/kill_diff/headshot_ratio)
-4) Teamplay Summary (assist_density, avg_player_kills, distribution)
-5) Weapon Meta Summary (rifle/smg/eco ratios, entropy, dependency)
-6) Top Weapons by impact (top 3)
-7) Strengths & Weaknesses (top 3 each)
-8) Recommendations (3-5 bullets)
-
-If user asks **"what-if"**:
-- apply requested parameter changes (weapon impact, ratios, strengths/weaknesses)
-- recompute adjusted win probability
-- show baseline vs scenario delta.
+        Tool for handling queries related **only to season-level analysis and team's strength**. Requires *team_id.
     """
+#     """
+# TOOL: **GET_TEAM_OVERALL_DATA**
+
+# When the user requests overall team strength / season-level analysis, call **GET_TEAM_OVERALL_DATA** with required ids.
+
+# After calling the tool:
+# - Use artifact.team_json as the only source of truth.
+# - Summarize the team’s overall strength using:
+#   - win_probability
+#   - team_strength_score
+#   - combat_metrics
+#   - teamplay_metrics
+#   - weapon_analysis
+#   - overall_weapon_win_impact
+#   - strengths and weaknesses
+
+# Output format:
+# 1) Team Overview (team_id, series_count if present)
+# 2) Win Probability + Team Strength Score
+# 3) Combat Summary (kills/deaths/kill_diff/headshot_ratio)
+# 4) Teamplay Summary (assist_density, avg_player_kills, distribution)
+# 5) Weapon Meta Summary (rifle/smg/eco ratios, entropy, dependency)
+# 6) Top Weapons by impact (top 3)
+# 7) Strengths & Weaknesses (top 3 each)
+# 8) Recommendations (3-5 bullets)
+
+# If user asks **"what-if"**:
+# - apply requested parameter changes (weapon impact, ratios, strengths/weaknesses)
+# - recompute adjusted win probability
+# - show baseline vs scenario delta.
+#     """
 
     name: str = "GET_TEAM_OVERALL_DATA"
     description: str = (
-        "Fetch overall team prediction JSON for a given team_id. "
-        "This contains aggregated team analysis across all series."
+        "Tool for handling queries related **only to season-level analysis and team's strength**. Requires *team_id."
     )
+    # description: str = (
+    #     "Fetch overall team prediction JSON for a given team_id. "
+    #     "This contains aggregated team analysis across all series."
+    # )
     args_schema: t.Type[BaseModel] = GetTeamOverallDataRequest
 
     response_format: str = "content_and_artifact"
@@ -220,34 +236,35 @@ class GetTeamSeriesDataRequest(BaseModel):
 
 class GetTeamSeriesDataTool(BaseTool):
     """
-    TOOL: **GET_TEAM_SERIES_DATA**
-    When the user requests team analysis for a specific series, call **GET_TEAM_SERIES_DATA** with:
-    - team_id
-    - series_id
-
-    After calling the tool:
-    - Use artifact.team_json as the only source of truth.
-    - Do NOT hallucinate fields.
-
-    Output format:
-    1) Series Context (team_id, series_id)
-    2) Win Probability Summary (and confidence if available)
-    3) Strengths & Weaknesses (top 3 each)
-    4) Combat & Teamplay highlights
-    5) Weapon Analysis & key weapon impacts
-    6) Key takeaways (3 bullets)
-    7) Suggested improvements (2-4 bullets)
-
-    If user asks **"what-if"**:
-    - modify the relevant parameters and compute new win probability using surrogate model.
-    - Optionally run Monte Carlo to show distribution shift.
-
+        Tool for handling queries based **only on team analysis for a specific series. ** Handles queries related only to team analysis with team_id and series_id as required
     """
+    # """
+    # TOOL: **GET_TEAM_SERIES_DATA**
+    # When the user requests team analysis for a specific series, call **GET_TEAM_SERIES_DATA** with:
+    # - team_id
+    # - series_id
+
+    # After calling the tool:
+    # - Use artifact.team_json as the only source of truth.
+    # - Do NOT hallucinate fields.
+
+    # Output format:
+    # 1) Series Context (team_id, series_id)
+    # 2) Win Probability Summary (and confidence if available)
+    # 3) Strengths & Weaknesses (top 3 each)
+    # 4) Combat & Teamplay highlights
+    # 5) Weapon Analysis & key weapon impacts
+    # 6) Key takeaways (3 bullets)
+    # 7) Suggested improvements (2-4 bullets)
+
+    # If user asks **"what-if"**:
+    # - modify the relevant parameters and compute new win probability using surrogate model.
+    # - Optionally run Monte Carlo to show distribution shift.
+    # """
 
     name: str = "GET_TEAM_SERIES_DATA"
     description: str = (
-        "Fetch team series prediction JSON for given team_id and series_id. "
-        "Returns both readable text and raw JSON artifact."
+        "Tool for handling queries based **only on team analysis for a specific series.** Handles queries related only to team analysis with team_id and series_id as required"
     )
     args_schema: t.Type[BaseModel] = GetTeamSeriesDataRequest
 
@@ -286,30 +303,32 @@ class PlayerProbabilityMonteCarloRequest(BaseModel):
 
 class PlayerProbabilityMonteCarloTool(BaseTool):
     """
-    Runs Monte Carlo simulation for a player's win probability based on latest series_id.
-
-    TOOL: **PLAYER_PROBABILITY_MONTE_CARLO**
-
-    Use this tool when the user asks:
-    - "run monte carlo for player"
-    - "simulate win probability"
-    - "what if player performance changes"
-    - "give distribution / p10 p90"
-
-    Steps:
-    1) Call PLAYER_PROBABILITY_MONTE_CARLO with player_id and simulator_params (if provided).
-    2) Use artifact.mc as the final Monte Carlo output.
-    3) Explain results: mean/median/p10/p90/stability.
-    4) Use artifact.simulator_params to show what variables were simulated.
-    5) Do not invent values not present in artifact. 
-
-    Returns both readable content and structured artifact.
+        Tool for handling **only a single player's win probability when no parameters or simulator_params(optional) is passed.** Handles queries related only to prediction of single player's win probability
     """
+    # """
+    # Runs Monte Carlo simulation for a player's win probability based on latest series_id.
 
-    name: str = "PLAYER_PROBABILITY_MONTE_CARLO"
+    # TOOL: **PLAYER_PROBABILITY_MONTE_CARLO**
+
+    # Use this tool when the user asks:
+    # - "run monte carlo for player"
+    # - "simulate win probability"
+    # - "what if player performance changes"
+    # - "give distribution / p10 p90"
+
+    # Steps:
+    # 1) Call PLAYER_PROBABILITY_MONTE_CARLO with player_id and simulator_params (if provided).
+    # 2) Use artifact.mc as the final Monte Carlo output.
+    # 3) Explain results: mean/median/p10/p90/stability.
+    # 4) Use artifact.simulator_params to show what variables were simulated.
+    # 5) Do not invent values not present in artifact. 
+
+    # Returns both readable content and structured artifact.
+    # """
+
+    name: str = "PLAYER_PROBABILITY"
     description: str = (
-        "Run Monte Carlo simulation for a player's win probability using player_id and optional simulator_params. "
-        "Automatically fetches the latest series for that player."
+        "Tool for handling **only a single player's win probability when no parameters or simulator_params(optional) is passed.** Handles queries related only to prediction of single player's win probability"
     )
     args_schema: t.Type[BaseModel] = PlayerProbabilityMonteCarloRequest
 
@@ -353,30 +372,36 @@ class PlayerVsPlayerMonteCarloRequest(BaseModel):
 
 class GetPlayerVsPlayerMonteCarloTool(BaseTool):
     """
-    Runs Monte Carlo simulation for Player A vs Player B win probability using
-    player series JSON inputs.
-
-    TOOL: **PLAYER_VS_PLAYER_PROBABILITY_MONTE_CARLO**
-
-    When the user asks to compare two players or asks "who will win" between Player A and Player B,
-    call PLAYER_VS_PLAYER_PROBABILITY_MONTE_CARLO with playerA_id and playerB_id.
-
-    After calling:
-    - Use artifact.monte_carlo as the source of truth.
-    - Summarize the result:
-    - win probability for Player A and Player B
-    - mean/median/min/max if provided
-    - stability/uncertainty
-    - Explain key reasons using artifact.playerA.player_json and artifact.playerB.player_json strengths/weaknesses.
-    - Do not hallucinate missing values.
+        Tool for handling **only Player A vs Player B and returns win probability output.** Handles queries related only to prediction of two players win probability
     """
+    # """
+    # Runs Monte Carlo simulation for Player A vs Player B win probability using
+    # player series JSON inputs.
 
-    name: str = "PLAYER_VS_PLAYER_PROBABILITY_MONTE_CARLO"
+    # TOOL: **PLAYER_VS_PLAYER_PROBABILITY_MONTE_CARLO**
+
+    # When the user asks to compare two players or asks "who will win" between Player A and Player B,
+    # call PLAYER_VS_PLAYER_PROBABILITY_MONTE_CARLO with playerA_id and playerB_id.
+
+    # After calling:
+    # - Use artifact.monte_carlo as the source of truth.
+    # - Summarize the result:
+    # - win probability for Player A and Player B
+    # - mean/median/min/max if provided
+    # - stability/uncertainty
+    # - Explain key reasons using artifact.playerA.player_json and artifact.playerB.player_json strengths/weaknesses.
+    # - Do not hallucinate missing values.
+    # """
+
+    name: str = "PLAYER_VS_PLAYER_PROBABILITY"
     description: str = (
-        "Run Monte Carlo player-vs-player win probability simulation. "
-        "Inputs: playerA_id, playerB_id. "
-        "Fetches latest series_id for both players, gets player series JSON, then simulates win probability."
+        "Tool for handling **only Player A vs Player B and returns win probability output.** Handles queries related only to prediction of two players win probability"
     )
+    # description: str = (
+    #     "Run Monte Carlo player-vs-player win probability simulation. "
+    #     "Inputs: playerA_id, playerB_id. "
+    #     "Fetches latest series_id for both players, gets player series JSON, then simulates win probability."
+    # )
     args_schema: t.Type[BaseModel] = PlayerVsPlayerMonteCarloRequest
 
     response_format: str = "content_and_artifact"
@@ -419,54 +444,58 @@ class TeamVsTeamMonteCarloRequest(BaseModel):
 
 class TeamVsTeamMonteCarloTool(BaseTool):
     """
-    Runs a Monte Carlo simulation for Team A vs Team B and returns win probability output.
-
-    TOOL: **TEAM_VS_TEAM_PROBABILITY_MONTE_CARLO**
-
-    Use this tool when the user asks:
-    - "Team A vs Team B win probability"
-    - "predict winner between two teams"
-    - "monte carlo simulation for match"
-    - "what are the odds of A beating B?"
-
-    Instructions after tool call:
-    - Use artifact.simulation as the source of truth.
-    - Report win probabilities clearly:
-    - Team A win %
-    - Team B win %
-    - uncertainty / CI if present
-    - Provide short reasoning based on:
-    - win_probability
-    - combat_metrics
-    - teamplay_metrics
-    - weapon_analysis 
-
+        Tool for handling **only Team A vs Team B and returns win probability output.** Handles queries related only to prediction of two teams win probability
     """
+    # """
+    # Runs a Monte Carlo simulation for Team A vs Team B and returns win probability output.
 
-    name: str = "TEAM_VS_TEAM_PROBABILITY_MONTE_CARLO"
-    description: str = '''
- Runs a Monte Carlo simulation for Team A vs Team B and returns win probability output.
+    # TOOL: **TEAM_VS_TEAM_PROBABILITY_MONTE_CARLO**
 
-    TOOL: **TEAM_VS_TEAM_PROBABILITY_MONTE_CARLO**
+    # Use this tool when the user asks:
+    # - "Team A vs Team B win probability"
+    # - "predict winner between two teams"
+    # - "monte carlo simulation for match"
+    # - "what are the odds of A beating B?"
 
-    Use this tool when the user asks:
-    - "Team A vs Team B win probability"
-    - "predict winner between two teams"
-    - "monte carlo simulation for match"
-    - "what are the odds of A beating B?"
+    # Instructions after tool call:
+    # - Use artifact.simulation as the source of truth.
+    # - Report win probabilities clearly:
+    # - Team A win %
+    # - Team B win %
+    # - uncertainty / CI if present
+    # - Provide short reasoning based on:
+    # - win_probability
+    # - combat_metrics
+    # - teamplay_metrics
+    # - weapon_analysis 
 
-    Instructions after tool call:
-    - Use artifact.simulation as the source of truth.
-    - Report win probabilities clearly:
-    - Team A win %
-    - Team B win %
-    - uncertainty / CI if present
-    - Provide short reasoning based on:
-    - win_probability
-    - combat_metrics
-    - teamplay_metrics
-    - weapon_analysis
-'''
+    # """
+
+    name: str = "TEAM_VS_TEAM_PROBABILITY"
+    description: str = """Tool for handling **only Team A vs Team B and returns win probability output.** Handles queries related only to prediction of two teams win probability"""
+# '''
+#  Runs a Monte Carlo simulation for Team A vs Team B and returns win probability output.
+
+#     TOOL: **TEAM_VS_TEAM_PROBABILITY_MONTE_CARLO**
+
+#     Use this tool when the user asks:
+#     - "Team A vs Team B win probability"
+#     - "predict winner between two teams"
+#     - "monte carlo simulation for match"
+#     - "what are the odds of A beating B?"
+
+#     Instructions after tool call:
+#     - Use artifact.simulation as the source of truth.
+#     - Report win probabilities clearly:
+#     - Team A win %
+#     - Team B win %
+#     - uncertainty / CI if present
+#     - Provide short reasoning based on:
+#     - win_probability
+#     - combat_metrics
+#     - teamplay_metrics
+#     - weapon_analysis
+# '''
     args_schema: t.Type[BaseModel] = TeamVsTeamMonteCarloRequest
 
     response_format: str = "content_and_artifact"
@@ -504,30 +533,36 @@ class TeamProbabilityMonteCarloRequest(BaseModel):
     )
 class TeamProbabilityMonteCarloTool(BaseTool):
     """
-    Runs Monte Carlo simulation for a team's win probability based on overall team JSON.
-
-    TOOL: **TEAM_PROBABILITY_MONTE_CARLO**
-
-Use this tool when the user asks:
-- Monte Carlo win probability
-- what-if simulations with uncertainty
-- probability distribution instead of single win_probability
-
-After tool call:
-- Use artifact.mc as the simulation output.
-- Use artifact.simulator_params_extracted to explain what parameters are available.
-- Provide:
-  1) baseline distribution (mean/median/p10/p90)
-  2) interpretation (stability/risk)
-  3) how simulator_params affect output
-- Never invent results.
+        Use this tool **only to estimate team's win probability distribution.**
     """
+#     """
+#     Runs Monte Carlo simulation for a team's win probability based on overall team JSON.
 
-    name: str = "TEAM_PROBABILITY_MONTE_CARLO"
+#     TOOL: **TEAM_PROBABILITY_MONTE_CARLO**
+
+# Use this tool when the user asks:
+# - Monte Carlo win probability
+# - what-if simulations with uncertainty
+# - probability distribution instead of single win_probability
+
+# After tool call:
+# - Use artifact.mc as the simulation output.
+# - Use artifact.simulator_params_extracted to explain what parameters are available.
+# - Provide:
+#   1) baseline distribution (mean/median/p10/p90)
+#   2) interpretation (stability/risk)
+#   3) how simulator_params affect output
+# - Never invent results.
+#     """
+
+    name: str = "TEAM_PROBABILITY"
     description: str = (
-        "Run Monte Carlo simulation to estimate team win probability distribution. "
-        "Takes team_id and simulator_params."
+        "Use this tool **only to estimate team's win probability distribution.**"
     )
+    # description: str = (
+    #     "Run Monte Carlo simulation to estimate team win probability distribution. "
+    #     "Takes team_id and simulator_params."
+    # )
     args_schema: t.Type[BaseModel] = TeamProbabilityMonteCarloRequest
 
     response_format: str = "content_and_artifact"
