@@ -1,14 +1,6 @@
 79 - 2843069 - 
 
-[TODO] Teams -> players (that game stats)
-Games -> player (overall stats can be find)
-
-Game Simulation
-
-dashboard player -> overall player
-series -> team report -> player report (overall, round report)
-
-Expected Results of next match
+[TODO] Monte Carlo (10k simulations) - pdf report generation
 
 ### Top Teams (6)
 

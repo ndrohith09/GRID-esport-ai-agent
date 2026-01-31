@@ -60,13 +60,22 @@ export const getMyTeams = async (
   }
 };
 
+export const getAllPlayers = async (
+) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/players`);
+    return response.data as PlayerType[];
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
 export const getTeamPlayers = async (
     team_id: string
 ) => {
   try {
-    const response = await axios.get(`${TEAMS_URL}/${team_id}/players` , {
-        params: { team_id: team_id }
-    });
+    const response = await axios.get(`${TEAMS_URL}/${team_id}/players`);
     return response.data as PlayerType[];
   } catch (error) {
     console.error("Error fetching data:", error);

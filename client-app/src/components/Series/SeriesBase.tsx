@@ -61,7 +61,7 @@ if (!teamSeriesData) {
       <Flex vertical className="h-full">
         <Splitter className="h-full">
           <Splitter.Panel
-            min="20%"
+            min="40%"
             collapsible={{ start: true, end: true, showCollapsibleIcon: 'auto' }}
             className="h-full"
           >

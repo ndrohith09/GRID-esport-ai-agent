@@ -7,8 +7,8 @@ import {
   PlusCircleOutlined,
 } from "@ant-design/icons";
 import { Button, Dropdown, type MenuProps } from "antd";
-import Logo96 from "../assets/button.png";
-import type { GameType } from "../api/team"; 
+import Logo96 from "../assets/button.png"; 
+import type { GameType } from "./Player/types";
 
 const Navbar = ({ teams }: { teams: GameType[] }) => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const Navbar = ({ teams }: { teams: GameType[] }) => {
   const navItems = [
     { label: "Dashboard", path: `/${game_id}/team/${team_id}`, icon: <HomeOutlined /> },
     { label: "TimeLine", path: `/${game_id}/team/${team_id}/timeline`, icon: <ClockCircleOutlined /> },
-    { label: "Task Details", path: "/tasks", icon: <FileTextOutlined /> },
+    { label: "Simulate", path: `/${game_id}/team/${team_id}/simulate`, icon: <FileTextOutlined /> },
   ];
 
   const items: MenuProps["items"] = [

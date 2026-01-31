@@ -33,7 +33,8 @@ const Stats: React.FC<Props> = ({
 }) => {
 
   const {game_id, team_id} = useParams();
-  const [teamPlayers, setTeamPlayers] = useState<PlayerType[]>([]);
+  const [teamPlayers, setTeamPlayers] = useState<PlayerType[]>([]); 
+ 
 
   // const teamStrengthScore = 0.39; // Replace with your actual team strength score
   // const percentage = teamStrengthScore * 100;
@@ -67,7 +68,8 @@ const getProgressColor = (percentage: number) => {
           LOADING_OPERATIVE_DATA ...
         </p> 
     ) : (
-    <div>
+    <div >
+          {/* <button onClick={reactToPrintFn}>Print</button> */}
       <Text className="text-[7px] uppercase tracking-wider text-gray-400 font-semibold ml-1">
         Overall Win Probablity
       </Text>

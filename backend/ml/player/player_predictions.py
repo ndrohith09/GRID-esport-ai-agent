@@ -424,7 +424,14 @@ class PlayerPredictions:
         if meta_json.empty:
             return {}
         return meta_json.iloc[0].to_dict()
-    
+
+    @staticmethod
+    def get_player_round_meta_json(meta, player_id, round_id):
+        meta_json = meta[(meta['player_id'].astype(str) == str(player_id)) & (meta['round'].astype(str) == str(round_id))]
+        if meta_json.empty:
+            return {}
+        return meta_json.iloc[0].to_dict()
+       
     def generate_player_report(self,strength_model,win_model, explainer, player_stats_df, meta , player_json):
         strengths, weaknesses = self.explain_player( explainer, player_stats_df
         )
@@ -664,7 +671,7 @@ class PlayerPredictions:
     '''
     def player_round_classifier_model_output(self, player_id, series_id, round):    
         player_stats_df, player_json = self.get_player_df(self.player_data_json, series_id, player_id, round)
-        meta_json = self.get_player_meta_json(self.meta, player_id)
+        meta_json = self.get_player_round_meta_json(self.meta, player_id, round)
         player_report = self.generate_player_report(
             strength_model=self.model,
             win_model=self.win_model,

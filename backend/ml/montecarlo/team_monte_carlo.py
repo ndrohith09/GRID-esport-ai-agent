@@ -121,6 +121,18 @@ class TeamMonteCarloPredictions:
     '''
     Function to simulate matches between two teams
     '''
+
+    @staticmethod
+    def summarize_match_sim(match_sim):
+        return {
+            "A_win_prob_series_mean": float(np.round(match_sim["A_win_prob_series"].mean() , 4)),
+            "B_win_prob_series_mean": float(1-np.round(match_sim["A_win_prob_series"].mean() , 4)),
+            "A_kills_mean": float(np.round(match_sim["A_kills"].mean(), 4)),
+            "B_kills_mean": float(np.round(match_sim["B_kills"].mean(), 4)),
+            "A_win_prob_series_5th_percentile": float(np.round(match_sim["A_win_prob_series"].quantile(0.05), 4)),
+            "A_win_prob_series_95th_percentile": float(np.round(match_sim["A_win_prob_series"].quantile(0.95), 4)),
+        }
+
     def simulate_match(self, teamA_json, teamB_json, n=50000):
         A = self.mc_team_sim(teamA_json, n=n, seed=1)
         B = self.mc_team_sim(teamB_json, n=n, seed=2)
@@ -130,30 +142,22 @@ class TeamMonteCarloPredictions:
         # series win prob from per-map p
         series_prob_A = pA*pA*(3 - 2*pA)
 
-        return pd.DataFrame({
+        return self.summarize_match_sim(pd.DataFrame({
             "A_win_prob_map": pA,
-            "A_win_prob_series": series_prob_A,
+            "A_win_prob_series": series_prob_A, 
             "A_kills": A["kills"].values,
             "B_kills": B["kills"].values,
             "A_deaths": A["deaths"].values,
             "B_deaths": B["deaths"].values,
-        })
+        }))
 
-    @staticmethod
-    def summarize_match_sim(match_sim):
-        return {
-            "A_win_prob_series_mean": float(np.round(match_sim["A_win_prob_series"].mean() , 4)),
-            "A_kills_mean": float(np.round(match_sim["A_kills"].mean(), 4)),
-            "B_kills_mean": float(np.round(match_sim["B_kills"].mean(), 4)),
-            "A_win_prob_series_5th_percentile": float(np.round(match_sim["A_win_prob_series"].quantile(0.05), 4)),
-            "A_win_prob_series_95th_percentile": float(np.round(match_sim["A_win_prob_series"].quantile(0.95), 4)),
-        }
 
     '''
     Build a “surrogate win probability model”
     '''
     @staticmethod
     def weapon_component(team_json):
+        print("weapon_component", team_json)
         impact = team_json["overall_weapon_win_impact"]
         wa = team_json["weapon_analysis"]
 
@@ -263,16 +267,31 @@ class TeamMonteCarloPredictions:
         out["win_probability"] = self.adjusted_win_probability(out)
         return out
 
-    def simulate_team_win_probability(self, team_json):
+    def simulate_team_win_probability(self, team_json, params):
 
         # TODO: fetch key values and pass here
-        scenario_json = self.update_team_json(team_json, {
+        '''
+        {
             "combat_metrics.kills" : 210,
             "combat_metrics.deaths" : 200,
-            "overall_weapon_win_impact.phantom": 0.55,
-            "weapon_analysis.rifle_ratio": team_json["weapon_analysis"]["rifle_ratio"] + 0.05,
+            "combat_metrics.headshot_ratio" : 0.5, // [0-1]
+            
+            "overall_weapon_win_impact.phantom": 0.55, // [0-1]
+
+            "team_strength_score" : 0.70, // [0-1]
+            "teamplay_metrics.assist_density" : 0.9, // [0-1]
+            "teamplay_metrics.avg_player_kills" : 40, 
+
+            "weapon_analysis.rifle_ratio": 0.05, 
+            "weapon_analysis.eco_ratio": 0.05,
+            "weapon_analysis.shotgun_ratio": 0.05,
+            "weapon_analysis.smg_ratio": 0.05,
+            "weapon_analysis.sniper_ratio": 0.05,
             "weapon_analysis.weapon_dependency": 0.40,
-        })
+            "weapon_analysis.weapon_entropy": 0.40,
+        }
+        '''
+        scenario_json = self.update_team_json(team_json, params)
         baseline_p = self.adjusted_win_probability(team_json)
         scenario_p = self.adjusted_win_probability(scenario_json)
 
@@ -280,8 +299,6 @@ class TeamMonteCarloPredictions:
         sim_scn  = self.mc_team_sim(scenario_json, n=50000)
 
         return self.summarize_sim(sim_scn)
-
-
 
 
 

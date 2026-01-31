@@ -3,24 +3,16 @@ import { Button, Typography, message, AutoComplete } from "antd";
 import { CheckCircleFilled, CheckOutlined } from "@ant-design/icons";
 import { addNewTeam, getTeamsList } from "../api/team";
 import { useNavigate } from "react-router-dom";
+import type { CustomOptions, Teams } from "./Simulate/types";
 
 const { Text } = Typography;
 
-type Teams = {
-  team_id: number, name: string
-}
-
-type Options = {
-    value: string;
-    label: string;
-    key: number;
-}
 
 const AddTeam: React.FC = () => {
   const [selectedGame, setSelectedGame] = useState<string>("");
   const [teamName, setTeamName] = useState("");
   const [teamId, setTeamId] = useState<string>("");   
-  const [teamOptions, setTeamOptions] = React.useState<Options[]>([])
+  const [teamOptions, setTeamOptions] = React.useState<CustomOptions[]>([])
 
   const navigate = useNavigate();
 

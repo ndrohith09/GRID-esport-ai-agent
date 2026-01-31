@@ -11,6 +11,7 @@ const { Header, Content, Footer } = Layout;
 import Cookies from 'js-cookie';
 import { generateUserId } from "./api/user";
 import { type GameType, getMyTeams } from "./api/team";
+import SimulateBase from "./components/Simulate/SimulateBase";
  
 
 const App: React.FC = () => {
@@ -97,6 +98,7 @@ const breadcrumbItems = generateBreadcrumbItems(pathnames);
         <Route path="/:game_id/team/:team_id/series/:series_id" element={<SeriesBase />} />
         <Route path="/:game_id/team/:team_id/series/:series_id/round/:round_id" element={<PlayerRoundBase />} />
         <Route path="/:game_id/team/:team_id/timeline" element={<Timeline />} />
+        <Route path="/:game_id/team/:team_id/simulate" element={<SimulateBase />} />
 
       </Route>
     </Routes>

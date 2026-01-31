@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page { size: A4; margin: 12mm; }
+        body { font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; color: #111; line-height: 1.5; background: #fff; margin: 0; }
+        
+        /* Top Banner */
+        .player-header { background: #000; color: #fff; padding: 40px 30px; display: flex; justify-content: space-between; align-items: flex-start; }
+        .player-info h1 { margin: 0; font-size: 28px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; }
+        .playstyle-tag { background: #333; color: #fff; font-size: 10px; padding: 4px 10px; border-radius: 4px; font-weight: bold; text-transform: uppercase; margin-top: 8px; display: inline-block; }
+        
+        .series-meta { text-align: right; font-family: monospace; font-size: 11px; line-height: 1.8; color: #888; }
+        .series-meta b { color: #fff; }
+
+        .content { padding: 30px; }
+
+        /* Probability Circle HUD */
+        .metrics-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; margin-bottom: 40px; }
+        
+        .prob-card { background: #f9fafb; padding: 25px; border-radius: 20px; border: 1px solid #f1f1f1; text-align: center; }
+        .big-percent { font-size: 64px; font-weight: 900; letter-spacing: -4px; line-height: 1; margin: 10px 0; }
+        .stability-bar { height: 4px; background: #e5e7eb; border-radius: 2px; width: 60%; margin: 15px auto; overflow: hidden; }
+
+        /* Section Styling */
+        h2 { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #999; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+
+        /* Economy & Weaponry Split */
+        .eco-weapon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        
+        .data-list { list-style: none; padding: 0; margin: 0; }
+        .data-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f9f9f9; font-size: 13px; }
+        .data-label { color: #666; font-size: 11px; text-transform: uppercase; font-weight: bold; }
+        .data-val { font-family: monospace; font-weight: bold; }
+
+        /* Impact Table */
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; font-size: 10px; color: #aaa; text-transform: uppercase; padding: 10px 5px; }
+        td { padding: 12px 5px; border-bottom: 1px solid #f0f0f0; font-size: 12px; }
+        
+        .impact-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+        .impact-high { background: #000; }
+        .impact-moderate { background: #666; }
+        .impact-low { background: #ccc; }
+
+        .weapon-badge { display: inline-block; padding: 4px 12px; border: 1px solid #000; border-radius: 20px; font-size: 10px; font-weight: 900; text-transform: uppercase; }
+        
+        .footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #eee; display: flex; justify-content: space-between; font-size: 9px; color: #aaa; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+    {% for player_series in player_series_list %}
+    <div>
+    <div class="player-header">
+        <div class="player-info">
+            <span style="font-size: 10px; font-weight: bold; color: #666; letter-spacing: 2px;">INDIVIDUAL_REPORT</span>
+            <h1>PLAYER_ID: {{ player_series.meta.player_id }}</h1>
+            <div class="playstyle-tag">STYLE: {{ player_series.playstyle|replace('_', ' ') }}</div>
+        </div>
+        <div class="series-meta">
+            SERIES_REF: <b>#{{ player_series.meta.series_id }}</b><br>
+            ROUNDS_PLAYED: <b>{{ player_series.meta.rounds_played }}</b><br>
+            WIN_RATIO: <b>{{ player_series.meta.rounds_won }}/{{ player_series.meta.rounds_lost }}</b>
+        </div>
+    </div>
+
+    <div class="content">
+        
+        <div class="metrics-grid">
+            <div class="prob-card">
+                <span class="data-label">Series Win Probability</span>
+                <div class="big-percent">{{ (player_series.win_probability.mean * 100)|round(1) }}%</div>
+                <span class="data-label" style="font-size: 9px;">Consistency Score: {{ (player_series.payer_consistency_score * 100)|round(1) }}%</span>
+                <div class="stability-bar">
+                    <div style="height: 100%; background: #000; width: {{ player_series.payer_consistency_score * 100 }}%"></div>
+                </div>
+            </div>
+
+            <div>
+                <h2>Economy Insight</h2>
+                <p style="font-size: 12px; font-style: italic; color: #444; margin-bottom: 15px;">{{ player_series.eco_summary.summary }}</p>
+                <div class="data-list">
+                    <div class="data-item">
+                        <span class="data-label">Loadout Ratio</span>
+                        <span class="data-val">{{ (player_series.economy_profile.player_loadout_ratio * 100)|round(1) }}%</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Networth Ratio</span>
+                        <span class="data-val">{{ (player_series.economy_profile.player_networth_ratio * 100)|round(1) }}%</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Credit Reserve</span>
+                        <span class="data-val">{{ (player_series.economy_profile.money_left_ratio * 100)|round(1) }}%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="eco-weapon-grid">
+            <div>
+                <h2>Weapon Engagement</h2>
+                <div style="margin-bottom: 15px;">
+                    <span class="weapon-badge">{{ player_series.weapon_profile.most_common_weapon }}</span>
+                </div>
+                <div class="data-list">
+                    {% for weapon, ratio in player_series.weapon_profile.weapon_usage_ratio.items() if ratio > 0 %}
+                    <div class="data-item">
+                        <span class="data-label">{{ weapon }}</span>
+                        <div style="display: flex; gap: 10px;">
+                            <span class="data-val" style="color: #aaa;">U:{{ (ratio * 100)|round(0) }}%</span>
+                            <span class="data-val">D:{{ (player_series.weapon_profile.weapon_damage_ratio[weapon] * 100)|round(0) }}%</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div>
+                <h2>Primary Strengths</h2>
+                <table>
+                    {% for item in player_series.series_strengths %}
+                    <tr>
+                        <td><div class="impact-dot impact-{{ item.impact_level }}"></div></td>
+                        <td style="font-weight: bold; text-transform: uppercase;">{{ item.feature|replace('_', ' ') }}</td>
+                        <td style="text-align: right; font-family: monospace; font-size: 10px;">+{{ item.mean_shap|round(3) }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                <h2 style="margin-top: 30px;">Critical Weaknesses</h2>
+                <table>
+                    {% for item in player_series.series_weaknesses %}
+                    <tr>
+                        <td><div class="impact-dot" style="background: #ff4d4f;"></div></td>
+                        <td style="font-weight: bold; text-transform: uppercase;">{{ item.feature|replace('_', ' ') }}</td>
+                        <td style="text-align: right; font-family: monospace; font-size: 10px;">{{ item.mean_shap|round(3) }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <div class="footer">
+            <span>INTEL_REPORT // GENERATED_2026</span>
+            <span>PLAYER_SERIES_PROTOCOL_V4</span>
+            <!-- <span>PAGE 01 / 01</span> -->
+        </div>
+    </div>
+    </div>  
+{% endfor %}
+
+</body>
+</html>

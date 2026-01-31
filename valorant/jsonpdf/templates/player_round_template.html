@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page { size: A4; margin: 10mm; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, sans-serif; color: #1a1a1a; line-height: 1.4; margin: 0; background: #fff; }
+        
+        /* Tactical Header */
+        .header { background: #000; color: #fff; padding: 30px; border-bottom: 5px solid #ff4d4f; }
+        .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
+        .player-name { font-size: 32px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; margin: 0; }
+        .round-badge { background: #ff4d4f; color: #fff; padding: 4px 12px; font-size: 12px; font-weight: bold; border-radius: 2px; }
+        
+        /* Warnings & Notes */
+        .alert-box { background: #fff1f0; border: 1px solid #ffa39e; padding: 15px; margin: 20px 30px; border-radius: 4px; }
+        .alert-title { color: #cf1322; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .alert-item { font-size: 11px; color: #850505; margin: 2px 0; font-family: monospace; }
+
+        .content { padding: 0 30px 30px 30px; }
+
+        /* Main Metrics Grid */
+        .metrics-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+        .metric-card { background: #f5f5f5; padding: 20px; border-radius: 8px; text-align: center; }
+        .metric-label { font-size: 9px; font-weight: bold; color: #8c8c8c; text-transform: uppercase; letter-spacing: 1px; }
+        .metric-value { font-size: 24px; font-weight: 900; display: block; margin: 5px 0; }
+        
+        /* Agent Fit Section */
+        .section-title { font-size: 12px; font-weight: 900; text-transform: uppercase; border-left: 4px solid #000; padding-left: 10px; margin: 30px 0 15px 0; }
+        
+        .agent-container { display: flex; align-items: center; gap: 20px; background: #fafafa; padding: 15px; border-radius: 8px; }
+        .agent-pill { background: #000; color: #fff; padding: 8px 16px; border-radius: 4px; font-weight: bold; text-transform: uppercase; font-size: 14px; }
+
+        /* Columns for Objectives and Damage */
+        .flex-row { display: flex; gap: 30px; }
+        .flex-col { flex: 1; }
+
+        /* Objective Table */
+        table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        th { text-align: left; color: #bfbfbf; padding-bottom: 8px; text-transform: uppercase; font-size: 9px; }
+        td { padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
+        .score-bar { height: 4px; background: #e8e8e8; border-radius: 2px; width: 60px; display: inline-block; }
+        .score-fill { height: 100%; background: #000; border-radius: 2px; }
+
+        /* Damage Source List */
+        .source-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px dotted #e8e8e8; }
+        .source-name { font-weight: bold; text-transform: uppercase; font-size: 10px; }
+        .source-bar-wrap { flex: 1; margin: 0 15px; height: 12px; background: #f5f5f5; position: relative; }
+        .source-bar-fill { height: 100%; background: #000; opacity: 0.8; }
+
+        .footer { margin-top: 40px; border-top: 1px solid #eee; padding-top: 15px; font-size: 9px; color: #bfbfbf; font-family: monospace; display: flex; justify-content: space-between; }
+    </style>
+</head>
+<body>
+
+    {% for round_data in rounds %}
+    <div>
+
+    <div class="header">
+        <div class="header-top">
+            <div>
+                <span class="round-badge">ROUND {{ round_data.meta.round }}</span>
+                <h1 class="player-name">{{ round_data.meta.player_name }} <span style="font-weight: 300; opacity: 0.6;">#{{ round_data.meta.player_id }}</span></h1>
+            </div>
+            <div style="text-align: right;">
+                <div class="metric-label" style="color: #fff; opacity: 0.5;">Win Probability</div>
+                <div style="font-size: 32px; font-weight: 900;">{{ (round_data.player_win_probability * 100)|round(2) }}%</div>
+            </div>
+        </div>
+    </div>
+
+    {% if round_data.meta.notes %}
+    <div class="alert-box">
+        <span class="alert-title">Critical Tactical Observations</span>
+        {% for note in round_data.meta.notes %}
+        <p class="alert-item">>> {{ note }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="content">
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <span class="metric-label">Recommended Agent</span>
+                <span class="metric-value" style="text-transform: uppercase;">{{ round_data.agent_fit.recommended_agent }}</span>
+                <span class="metric-label">Best Ability: {{ round_data.ability_fit.best_ability }}</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Strength Score</span>
+                <span class="metric-value">{{ round_data.player_strength_score }}</span>
+                <span class="metric-label">Combat Efficiency Low</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Primary Weapon</span>
+                <span class="metric-value" style="text-transform: uppercase;">{{ round_data.damage_source_analysis.most_common_source }}</span>
+                <span class="metric-label">{{ round_data.weapon_summary.summary }}</span>
+            </div>
+        </div>
+
+        <div class="flex-row">
+            <div class="flex-col">
+                <h2 class="section-title">Objective Suitability</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Objective</th>
+                            <th>Count</th>
+                            <th>First</th>
+                            <th>Suitability</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for obj in round_data.objective_fit.objective_breakdown %}
+                        <tr>
+                            <td style="font-weight: bold;">{{ obj.objective|replace('Bomb', '_BOMB')|upper }}</td>
+                            <td>{{ obj.completion_count }}</td>
+                            <td style="color: {{ '#52c41a' if obj.completed_first == 'True' else '#bfbfbf' }}; font-weight: bold;">
+                                {{ obj.completed_first }}
+                            </td>
+                            <td>
+                                <div class="score-bar">
+                                    <div class="score-fill" style="width: {{ (obj.suitability_score / 10) * 100 }}%;"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex-col">
+                <h2 class="section-title">Damage Source Distribution</h2>
+                {% for item in round_data.damage_source_analysis.breakdown %}
+                <div class="source-item">
+                    <span class="source-name" style="width: 80px;">{{ item.source }}</span>
+                    <div class="source-bar-wrap">
+                        <div class="source-bar-fill" style="width: {{ item.damage_ratio * 100 }}%;"></div>
+                    </div>
+                    <span style="font-family: monospace; font-size: 10px; width: 40px; text-align: right;">{{ (item.damage_ratio * 100)|round(1) }}%</span>
+                </div>
+                {% endfor %}
+
+                <div style="margin-top: 20px; padding: 15px; background: #fafafa; border-radius: 4px;">
+                    <span class="metric-label">Damage Target Profile</span>
+                    <p style="font-size: 11px; margin: 10px 0 0 0; font-weight: bold;">
+                        PRIMARY: {{ round_data.damage_target_analysis.most_common_target|upper }} ({{ (round_data.damage_target_analysis.breakdown[0].damage_ratio * 100)|round(1) }}%)
+                    </p>
+                    <p style="font-size: 10px; color: #666; margin: 5px 0 0 0;">{{ round_data.enemy_damage_summary.summary }}</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Strategic Risk Factors</h2>
+        <div style="display: flex; gap: 20px;">
+            {% for weak in round_data.weaknesses %}
+            <div style="flex: 1; border: 1px solid #eee; padding: 10px; border-radius: 4px;">
+                <span class="metric-label" style="color: #ff4d4f;">{{ weak.impact_level }}</span>
+                <div style="font-size: 11px; font-weight: bold; margin-top: 5px;">{{ weak.feature|replace('_', ' ')|upper }}</div>
+                <div style="font-family: monospace; font-size: 10px; color: #999;">SHAP: {{ weak.shap_score|round(3) }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="footer">
+            <span>TACTICAL_ENVELOPE: {{ round_data.meta.series_id }}</span>
+            <span>CONFIDENTIAL // INTERNAL USE ONLY</span>
+        </div>
+    </div>
+</div>
+{% endfor %}
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSON Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .key {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>JSON Data</h1>
+    <div>
+        {% for key, value in data.items() %}
+            <p><span class="key">{{ key }}:</span> {{ value }}</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page { size: A4; margin: 15mm; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #1a1a1a; background: #fff; margin: 0; padding: 0; }
+        
+        /* Tactical Header */
+        .report-header { background: #000; color: #fff; padding: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .report-header h1 { margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 4px; }
+        .report-header .id-badge { font-family: monospace; font-size: 12px; color: #888; }
+
+        .container { padding: 30px; }
+
+        /* Probability HUD */
+        .prob-section { display: flex; align-items: center; gap: 40px; background: #f8f9fa; padding: 25px; border-radius: 15px; border: 1px solid #eee; margin-bottom: 30px; }
+        .prob-value { font-size: 56px; font-weight: 900; letter-spacing: -2px; line-height: 1; }
+        .prob-label { font-size: 10px; font-weight: bold; color: #999; text-transform: uppercase; letter-spacing: 2px; }
+        
+        /* Grid Layout */
+        .grid-3 { display: flex; gap: 20px; margin-bottom: 30px; }
+        .stat-card { flex: 1; border-bottom: 3px solid #eee; padding-bottom: 15px; }
+        .stat-card.active { border-color: #000; }
+        .stat-val { font-size: 20px; font-weight: 800; display: block; }
+        .stat-sub { font-size: 9px; color: #888; font-weight: bold; text-transform: uppercase; }
+
+        /* Strength/Weakness Comparison */
+        .analysis-split { display: flex; gap: 40px; }
+        .analysis-col { flex: 1; }
+        h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; padding-bottom: 5px; border-bottom: 1px solid #eee; }
+
+        .feature-row { margin-bottom: 12px; }
+        .feature-meta { display: flex; justify-content: space-between; margin-bottom: 4px; }
+        .feature-name { font-size: 10px; font-weight: 800; text-transform: uppercase; }
+        .feature-score { font-family: monospace; font-size: 10px; color: #666; }
+        
+        .progress-bar-bg { background: #f0f0f0; height: 4px; border-radius: 2px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; border-radius: 2px; }
+        .fill-pos { background: #000; }
+        .fill-neg { background: #ff4d4f; }
+
+        /* Weapon Matrix */
+        .weapon-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; }
+        .weapon-box { border: 1px solid #f0f0f0; padding: 8px; border-radius: 6px; }
+        .weapon-name { font-size: 8px; font-weight: bold; color: #aaa; display: block; }
+        .weapon-impact { font-size: 12px; font-weight: 800; }
+    </style>
+</head>
+<body>
+
+    <div class="report-header">
+        <div>
+            <h1>Series Intel Report</h1>
+            <span class="id-badge">TEAM_OBJECT_REF: {{ team_series.meta_data.team_id  | string }}</span>
+            <div class="id-badge">SERIES_ID: {{ team_series.meta_data.series_id  | string }}</div>
+
+        </div>
+        <div style="text-align: right">
+            <div class="id-badge" style="color: #555">DATE: 2026.01.31</div>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <div class="prob-section">
+            <div>
+                <span class="prob-label">Win Probability</span>
+                <div class="prob-value">{{ (team_series.win_probability * 100)|round(1) }}%</div>
+            </div>
+            <div style="flex: 1">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px">
+                    <span class="prob-label" style="font-size: 8px">Status: {{ 'Optimized' if team_series.win_probability > 0.5 else 'Underperforming' }}</span>
+                    <span class="prob-label" style="font-size: 8px">Confidence: High</span>
+                </div>
+                <div style="height: 8px; background: #eee; border-radius: 4px; overflow: hidden">
+                    <div style="width: {{ team_series.win_probability * 100 }}%; height: 100%; background: #000;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-3">
+            <div class="stat-card active">
+                <span class="stat-sub">Combat K/D</span>
+                <span class="stat-val">{{ (team_series.combat_metrics.kills / team_series.combat_metrics.deaths)|round(2) }}</span>
+                <span class="stat-sub" style="color:#999">{{ team_series.combat_metrics.kills|round(0) }} K / {{ team_series.combat_metrics.deaths|round(0) }} D</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-sub">Precision Ratio</span>
+                <span class="stat-val">{{ (team_series.combat_metrics.headshot_ratio * 100)|round(1) }}%</span>
+                <span class="stat-sub" style="color:#999">Accuracy Index</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-sub">Kill Differential</span>
+                <span class="stat-val" style="color: {{ '#ff4d4f' if team_series.combat_metrics.kill_diff < 0 else '#000' }}">
+                    {{ team_series.combat_metrics.kill_diff|round(1) }}
+                </span>
+                <span class="stat-sub" style="color:#999">Net Series Impact</span>
+            </div>
+        </div>
+
+        <div class="analysis-split">
+            <div class="analysis-col">
+                <h3>Positive Signals</h3>
+                {% for item in team_series.strengths %}
+                <div class="feature-row">
+                    <div class="feature-meta">
+                        <span class="feature-name">{{ item.feature|replace('_', ' ') }}</span>
+                        <span class="feature-score">{{ (item.normalized_score * 100)|round(0) }}%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill fill-pos" style="width: {{ item.normalized_score * 100 }}%"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            </div>
+            <br />
+        <div class="analysis-split">
+            <div class="analysis-col">
+                <h3>Loss Risk Factors</h3>
+                {% for item in team_series.weaknesses %}
+                <div class="feature-row">
+                    <div class="feature-meta">
+                        <span class="feature-name">{{ item.feature|replace('_', ' ') }}</span>
+                        <span class="feature-score">{{ (item.normalized_score * 100)|round(0) }}%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill fill-neg" style="width: {{ item.normalized_score * 100 }}%"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <h3 style="margin-top: 40px">Top Weapon Synergies (>55% Impact)</h3>
+        <div class="weapon-grid">
+            {% for weapon, impact in team_series.overall_weapon_win_impact.items() %}
+                {% if impact > 0.55 %}
+                <div class="weapon-box">
+                    <span class="weapon-name">{{ weapon|upper }}</span>
+                    <span class="weapon-impact">{{ (impact * 100)|round(1) }}%</span>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div style="margin-top: 60px; border-top: 1px solid #eee; padding-top: 10px; font-size: 8px; color: #ccc; font-family: monospace;">
+            DATASET_SERIES_COMPLETE // NO_ALTERATION_PERMITTED
+        </div>
+    </div>
+
+</body>
+</html>

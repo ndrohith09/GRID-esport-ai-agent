@@ -49,7 +49,7 @@ const playerOptions = rawPlayers.map(player => ({
         <div className="max-w-full mx-auto">
           {/* Action Options */}
           <Flex gap={6} className="mb-3 overflow-x-auto pb-1 no-scrollbar">
-            {["Quick Stats", "Recap", "Economy"].map((opt) => (
+            {["Quick Stats", "Generate Scouting Report", "Economy"].map((opt) => (
               <button
                 key={opt}
                 className="px-2 py-1 my-1 rounded-md border border-gray-100 text-[9px] font-bold text-gray-400 hover:border-black hover:text-black transition-all uppercase"

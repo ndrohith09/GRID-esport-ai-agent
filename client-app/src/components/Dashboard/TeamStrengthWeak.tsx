@@ -12,16 +12,7 @@ const TeamImpactAnalysis:React.FC<Props> = ({
   strengths,
   weakness
 }) => {
-  // const strengths = [
-  //   { feature: "shotgun_damage_ratio", shap_score: 0.089, impact_level: "moderate impact" }
-  // ];
-  
-  // const weaknesses = [
-  //   { feature: "damage_efficiency", shap_score: -4.405, impact_level: "high impact" },
-  //   { feature: "body_damage_ratio", shap_score: -0.176, impact_level: "high impact" },
-  //   { feature: "headshot_damage_ratio", shap_score: -0.058, impact_level: "moderate impact" },
-  //   { feature: "alive_uptime", shap_score: -0.053, impact_level: "moderate impact" }
-  // ];
+ 
 
   return (
     <div className="w-full bg-white p-6 rounded-lg border border-gray-100 shadow-xs">
@@ -35,6 +26,7 @@ const TeamImpactAnalysis:React.FC<Props> = ({
         </div>
       </div>
 
+    {/* {JSON.stringify(strengths)} */}
       <Row gutter={32}>
         {/* STRENGTHS COLUMN */}
         <Col xs={24} md={12}>
@@ -53,7 +45,7 @@ const TeamImpactAnalysis:React.FC<Props> = ({
                   <div className="flex-1 h-1.5 bg-green-100 rounded-full overflow-hidden">
                     <div className="h-full bg-green-500" style={{ width: '40%' }} />
                   </div>
-                  <span className="text-[11px] font-mono font-bold text-green-700">+{item.shap_score ? Number(item.shap_score).toFixed(3) : '...'}</span>
+                  <span className="text-[11px] font-mono font-bold text-green-700">+{Number(item.normalized_score).toFixed(3)}</span>
                 </div>
                 <span className="text-[10px] font-bold text-green-600/50 uppercase mt-2 block">{item.impact_level}</span>
               </div>
@@ -74,7 +66,7 @@ const TeamImpactAnalysis:React.FC<Props> = ({
                   <span className={`text-[11px] font-bold uppercase ${item.impact_level.includes('high') ? 'text-red-600' : 'text-gray-600'}`}>
                     {item.feature.replace(/_/g, ' ')}
                   </span>
-                  <span className="text-[11px] font-mono font-bold text-red-400">{item.shap_score ? Number(item.shap_score).toFixed(3) : '...'}</span>
+                  <span className="text-[11px] font-mono font-bold text-red-400">{Number(item.normalized_score).toFixed(3)}</span>
                 </div>
                 <Progress 
                   percent={item.normalized_score * 100} // Scaled for visual impact_level
