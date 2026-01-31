@@ -78,3 +78,22 @@ export const getPlayersCompareProbability = async (
         throw error;
     }
 }
+
+
+export const generateScoutingReport = async (
+    team_id: string, 
+    series_id: string, 
+
+) => {
+
+    try {
+        const response = await axios.post(`${BASE_URL}/scouting-report`, {
+             team_id: team_id,
+             series_id: series_id
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error team:", error);
+        throw error;
+    }
+}

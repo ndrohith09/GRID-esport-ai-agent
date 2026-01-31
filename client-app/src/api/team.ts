@@ -82,7 +82,7 @@ export const getTeamPlayers = async (
     throw error;
   }
 };
-
+ 
 export const getTeamSeriesRounds = async (
     team_id: string,
     series_id: string

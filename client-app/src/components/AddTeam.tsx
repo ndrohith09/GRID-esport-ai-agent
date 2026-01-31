@@ -21,8 +21,8 @@ useEffect(() => {
     // setRawTeams(data);
     console.log("Fetched Teams:", data);
     const options = data.map((team, index) => ({
-      value: team.name, 
-      label: `${team.name}`, 
+      value: team.team_name, 
+      label: `${team.team_name}`, 
       key: team.team_id          
     }));
     setTeamOptions(options);

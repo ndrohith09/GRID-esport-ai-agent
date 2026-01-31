@@ -45,8 +45,8 @@ def add_team():
         conn.close()
 
 
-@home_blueprint.route('/json-to-pdf', methods=['POST'])
-def json_to_pdf():
+@home_blueprint.route('/scouting-report', methods=['POST'])
+def scouting_report():
     # Load HTML template
     data = request.json
     team_id = data.get('team_id')
@@ -90,7 +90,7 @@ def json_to_pdf():
 
     # Return JSON response with PDF URL
     pdf_url = url_for('home.serve_pdf', filename=pdf_file, _external=True)
-    return jsonify({'pdf_url': pdf_url, "rounds_list" : rounds_list})
+    return jsonify({'pdf_url': pdf_url})
 
 @home_blueprint.route('/serve-pdf/<filename>')
 def serve_pdf(filename):

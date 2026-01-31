@@ -5,22 +5,26 @@ import {
   FileTextOutlined,
   HomeOutlined,
   PlusCircleOutlined,
+  SlidersOutlined,
 } from "@ant-design/icons";
 import { Button, Dropdown, type MenuProps } from "antd";
 import Logo96 from "../assets/button.png"; 
 import type { GameType } from "./Player/types";
+import { generateScoutingReport } from "../api/simulation";
+import { useState } from "react";
 
 const Navbar = ({ teams }: { teams: GameType[] }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { team_id, game_id } = useParams();
+  const { team_id, game_id, series_id } = useParams();
   const team = teams.find((team) => team.team_id.toString() === team_id);
+  const [loading, setLoading] = useState(false);
 
   const navItems = [
     { label: "Dashboard", path: `/${game_id}/team/${team_id}`, icon: <HomeOutlined /> },
     { label: "TimeLine", path: `/${game_id}/team/${team_id}/timeline`, icon: <ClockCircleOutlined /> },
-    { label: "Simulate", path: `/${game_id}/team/${team_id}/simulate`, icon: <FileTextOutlined /> },
+    { label: "Simulate", path: `/${game_id}/team/${team_id}/simulate`, icon: <SlidersOutlined /> },
   ];
 
   const items: MenuProps["items"] = [
@@ -43,8 +47,18 @@ const Navbar = ({ teams }: { teams: GameType[] }) => {
     navigate(`/dashboard/${e.key}`)
   };
 
-  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log("click left button", e);
+  const scoutingHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setLoading(true);
+     generateScoutingReport(team_id ?? '', series_id ?? '')
+     .then((res) => {
+       console.log("Res", res.pdf_url);
+       setLoading(false);
+      window.open(res.pdf_url, '_blank');
+     })
+     .catch((err) => {
+       setLoading(false);
+      console.log("err",err)
+     })
   };
 
   const menuProps = {
@@ -98,9 +112,28 @@ const Navbar = ({ teams }: { teams: GameType[] }) => {
                 </Button>
               );
             })}
+            <Button
+                  // key={item.path}
+                  icon={<FileTextOutlined />}
+                  // 1. Change the path on click
+                  onClick={scoutingHandler}
+                  // 2. Dynamic styling based on isActive
+                  style={{
+                    backgroundColor: "transparent",
+                    color:  "gray",
+                  }}
+                  className={`
+              h-10 px-5 border-none rounded-xl font-medium shadow-sm transition-all flex items-center
+              text-gray-500 bg-transparent hover:bg-gray-100              
+            `}
+                >
+                               {loading ? 'Generating...' : 'Scouting Report'}
+                </Button>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
+        
+                   
             <button className="p-2 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
               <svg
                 className="h-6 w-6"
@@ -115,7 +148,7 @@ const Navbar = ({ teams }: { teams: GameType[] }) => {
                   d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                 />
               </svg>
-            </button>
+            </button> 
 
             <Dropdown menu={menuProps}>
               <Button

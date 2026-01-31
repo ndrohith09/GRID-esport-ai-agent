@@ -60,8 +60,8 @@ const SimulateBase: React.FC = () => {
               <TeamOverallSimulator teamOptions={teamOptions} />
               ) : (
                  <p className="text-gray-400 font-mono text-xs">
-          LOADING_OPERATIVE_DATA ...
-        </p> 
+                    LOADING_OPERATIVE_DATA ...
+                  </p> 
               )}
               {/* Component 2: YOUR NEXT COMPONENT GOES HERE */}
             </Space>
@@ -77,7 +77,6 @@ const SimulateBase: React.FC = () => {
                   Player Win Projection
                 </Text>
               </Divider>
-
               <PlayerOverallSimulator />
               <br />
               <br />
