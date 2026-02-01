@@ -10,6 +10,7 @@ import {
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import ChatInput from "./InputField";
+import WinMeter from "./Tools/WinMeter";
 
 const { Text } = Typography;
 const markdown = `
@@ -84,10 +85,14 @@ const ChatGUI: React.FC = () => {
                 prose-p:leading-relaxed prose-p:my-1
                 prose-pre:bg-gray-900 prose-pre:text-white prose-pre:p-2"
                       >
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
+
+                        <WinMeter />  
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {markdown}
+                        </ReactMarkdown>
                       </div>
                     ) : (
-                      msg.text
+                      msg.text  
                     )}
                   </div>
                 </div>
@@ -98,7 +103,7 @@ const ChatGUI: React.FC = () => {
       </div>
 
       {/* 3. Input Area (Pinned to bottom of panel, NOT screen) */}
-          <ChatInput />
+      <ChatInput />
     </div>
   );
 };

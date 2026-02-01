@@ -57,7 +57,7 @@ useEffect(() => {
           </span>
           <div className="flex justify-between items-end">
             <span className="text-[10px] font-mono text-gray-400 uppercase">
-              CODE: {round.side.toUpperCase()}
+              SIDE: {round.side.toUpperCase()}
             </span>
             {/* Minimal "View" arrow that appears on hover */}
             <span className="text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">

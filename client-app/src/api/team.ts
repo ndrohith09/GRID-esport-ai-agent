@@ -32,6 +32,19 @@ export const getTeamSeriesList = async (
   }
 };
 
+export const getTeamSeriesOpponent = async (
+    team_id: string,
+    series_id: string,
+) => {
+  try {
+    const response = await axios.get(`${TEAMS_URL}/${team_id}/${series_id}/opponent`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
 
 export const getTeamSeriesPlayersList = async (
     team_id: number, series_id: number

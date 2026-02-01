@@ -68,6 +68,28 @@ def get_team_series_ids(team_id):
 
     df_out = pd.read_sql_query(q, conn)
     return df_out.to_dict(orient="records")
+
+@team_blueprint.route('/teams/<team_id>/<series_id>/opponent', methods=['GET'])
+def get_team_series_opponent(team_id , series_id):
+    conn = get_db()
+
+    q = f"""
+    SELECT DISTINCT T3.team_name, T3.team_id, T1.start_date, T1.tournament_name
+    FROM series T1
+    JOIN (
+        SELECT 
+        CASE 
+            WHEN T1.team_ids LIKE '{team_id},%' THEN SUBSTR(T1.team_ids, INSTR(T1.team_ids, ',') + 1)
+            WHEN T1.team_ids LIKE '%,{team_id}' THEN SUBSTR(T1.team_ids, 1, INSTR(T1.team_ids, ',') - 1)
+        END AS other_team_id
+        FROM series T1 
+        WHERE T1.series_id = {series_id}
+    ) T2 ON T1.series_id = {series_id}
+    JOIN 'all-players' T3 ON T2.other_team_id = T3.team_id;
+    """
+    df_out = pd.read_sql_query(q, conn)
+    return df_out.to_dict(orient="records")
+
 # def get_team_series_ids(team_id):
 #     conn = get_db()
 #     teams_q =  f"SELECT DISTINCT series_id, won FROM 'all-teams' WHERE team_id = '{team_id}'"

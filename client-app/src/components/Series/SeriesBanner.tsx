@@ -1,6 +1,19 @@
-const SeriesBanner = () => {
+import { useParams } from "react-router-dom";
+import type { TeamData } from "../Dashboard/types";
 
+type Props = {
+  opponent: { [key:string]: any};
+  teamSeriesData: TeamData
+}
+
+const SeriesBanner:React.FC<Props> = ({
+  opponent,
+  teamSeriesData
+}) => {
+
+  const { team_id, series_id } = useParams();
     const won = 0;
+    
     return(
             <div className={`relative overflow-hidden rounded-2xl border mb-6 transition-all duration-500 bg-black border-black text-white shadow-xl shadow-black/10`}>
       {/* Decorative Background Pattern */}
@@ -30,7 +43,7 @@ const SeriesBanner = () => {
 <div className="mt-4 pt-4 border-t border-gray-100/10 flex flex-wrap items-center gap-x-6 gap-y-2">
   <div className="flex flex-col">
     <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Series ID</span>
-    <span className="text-[11px] font-mono font-bold">#2629392</span>
+    <span className="text-[11px] font-mono font-bold">#{series_id}</span>
   </div>
 
   {/* <div className="hidden md:block w-[1px] h-6 bg-gray-100/20" />  */}
@@ -39,7 +52,7 @@ const SeriesBanner = () => {
     <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Operation</span>
     <span className="text-[11px] font-bold uppercase truncate max-w-[300px]">
       {/* {tournament_name.split('(')[0]} */}
-      VCT Americas - Kickoff 2024 (Groups: Group B)
+      {opponent.tournament_name}
     </span>
   </div>
 
@@ -47,14 +60,16 @@ const SeriesBanner = () => {
 
   <div className="flex flex-col">
     <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Timestamp</span>
-    <span className="text-[11px] font-bold uppercase">2024-02-17</span>
+    <span className="text-[11px] font-bold uppercase">{opponent.start_date}</span>
   </div>
 </div>
 
         {/* Large Visual Indicator */}
         <div className="flex flex-col items-center md:items-end">
-          <div className={`text-6xl font-black italic leading-none text-white/20`}>
-            {won ? 'SUCCESS' : 'FAILURE'}
+          <div className={`text-4xl font-black italic leading-none text-white/20`}>
+            {/* {won ? 'SUCCESS' : 'FAILURE'} */}
+            <span className="text-xl mr-2">vs</span>
+             {opponent.team_name}
           </div>
           <button className={`mt-2 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest border transition-all
             bg-white text-black border-white hover:bg-gray-200
