@@ -10,7 +10,7 @@ import { getTeamSeriesData } from '../../api/predict';
 import { useParams } from 'react-router-dom';
 import type { TeamData } from '../Dashboard/types';
 import type { PlayerType } from '../Player/types';
-import { getTeamPlayers } from '../../api/team';
+import { getTeamPlayers, getTeamSeriesOpponent } from '../../api/team';
 
 const { Text } = Typography;
 
@@ -19,6 +19,7 @@ const SeriesBase: React.FC = () => {
   const { team_id, series_id } = useParams();
   const [teamSeriesData, setTeamSeriesData] = useState<TeamData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [opponent, setOpponent] = useState();
   
     const [teamPlayers, setTeamPlayers] = useState<PlayerType[]>([]);
   
@@ -42,6 +43,14 @@ const SeriesBase: React.FC = () => {
       setLoading(false);  
       console.error("Error fetching team series data:", error);
     });
+
+    getTeamSeriesOpponent(team_id ?? '', series_id ?? '')
+    .then((data) => {
+      setOpponent(data[0]); 
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   }, [])
 
 if (!teamSeriesData) {
@@ -66,7 +75,7 @@ if (!teamSeriesData) {
             className="h-full"
           >
             <div className='p-6'> 
-                <SeriesBanner />
+                <SeriesBanner teamSeriesData={teamSeriesData} opponent={opponent} />
                  <Divider titlePlacement="center">
                 <Text className="text-lg my-2 uppercase tracking-wider text-gray-400 font-semibold ml-1">
                 Series Rounds

@@ -1,7 +1,9 @@
 79 - 2843069 - 
 2843060 (21-aug-2025)
 
-[TODO] Monte Carlo (10k simulations) - pdf report generation
+[TODO] Against whom the match was played?
+
+Monte Carlo (10k simulations) - pdf report generation
 
 Prompts
 - what is team_id:79 strengths?
@@ -81,6 +83,8 @@ what are the chances of winning the match if player_id:10612 plays next match? -
 
 
 Provide me weapon analysis of the player_id:10612 from series_id:2843069 - **Weapon Analysis for Player 10612 (Series 2843069):**\n\n- **Primary Weapon:** Rifle  \n  - **Usage Ratio:** 73.7%  \n  - **Damage Contribution:** 69.8%  \n  - **Summary:** The player relies heavily on rifles as their main weapon, consistent with an aim-heavy playstyle.\n\n- **Secondary Weapons:**\n  - **Pistol:** 13.8% usage, 8% damage contribution — effective in pistol rounds but limited overall impact.\n  - **SMG:** 12.5% usage, 4.3% damage contribution — situational use, low damage efficiency.\n  - **Shotgun/Sniper/Ability:** No recorded usage or damage.\n\n- **Strengths:**\n  - **Pistol Damage Ratio:** Slightly positive impact, showing competence in pistol rounds.\n  - **Headshot Damage Ratio:** Low but positive influence, aligning with aim-heavy tendencies.\n\n- **Weaknesses:**\n  - **Damage Efficiency:** Major negative impact — suggests poor conversion of shots into effective damage.\n  - **Body and Leg Damage Ratios:** Low impact and consistency, indicating suboptimal shot placement.\n\n**Overall Assessment:**  \nPlayer 10612 is a rifle-focused, aim-heavy player with disciplined credit management. However, their damage efficiency and round survival are weak points, limiting their overall effectiveness despite strong rifle reliance.
+
+Take the data from team_id:79, series_id:2843069 concluded match and generate a Game Review Agenda - ### Game Review Agenda — Team 79 (Series ID: 2843069)\n\n**1. Match Overview**\n- **Team Strength Score:** 0.122  \n- **Win Probability:** 1.1%  \n- **Outcome:** Concluded match with low win likelihood.\n\n**2. Key Strengths**\n- **Least Weapon Ratio:** High positive impact; strongly supports winning.  \n- **Team Coordination (team_id factor):** Moderate positive impact.  \n- **Shotgun & Top Weapon Ratios:** Minor positive influences.  \n- **Assist Density:** Slightly positive, indicating decent team support.\n\n**3. Main Weaknesses**\n- **Kill Differential (-42):** High negative impact; major contributor to loss.  \n- **Weapon Usage (rifle & SMG ratios):** Negligible negative effects.  \n- **Low Kill Count & Weapon Entropy:** Minor negative influences.\n\n**4. Combat Performance**\n- **Kills/Deaths:** 197 / 239  \n- **Headshot Ratio:** 85.3% (strong individual aim)  \n- **Kill Distribution Std:** 11.29 (uneven player performance)\n\n**5. Weapon Utilization**\n- **Primary Use:** Rifles (57.3%), Eco (16.7%)  \n- **Weapon Dependency:** 0.365 (moderate reliance)  \n- **Top Performing Weapons:** Ares (0.67 win impact), Shorty (0.59), Outlaw (0.58)  \n- **Underperforming Weapons:** Melee (0.39), Bucky (0.44)\n\n**6. Teamplay Metrics**\n- **Assist Density:** 0.462 (moderate teamwork)  \n- **Average Player Kills:** 39.4  \n\n**7. Discussion Points**\n- Address kill differential and player consistency.  \n- Optimize rifle and SMG usage efficiency.  \n- Leverage high-performing weapons (Ares, Shorty, Outlaw).  \n- Enhance assist coordination and kill distribution balance.\n\n**8. Action Items**\n- Conduct weapon strategy review.  \n- Focus on improving kill-to-death ratio.  \n- Reinforce team synergy and assist patterns.  \n- Develop targeted training for underperforming players
 
 ----
 
