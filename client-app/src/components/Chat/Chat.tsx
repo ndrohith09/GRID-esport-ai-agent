@@ -11,6 +11,10 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import ChatInput from "./InputField";
 import WinMeter from "./Tools/WinMeter";
+import { TOOL_TYPES } from "./Tools/type";
+import TeamTeamWinMeter from "./Tools/TeamTeamWinMeter";
+import PlayerWinProbabilityGauge from "./Tools/PlayerWinProbabilityGauge";
+import TeamWinProbabilityGauge from "./Tools/TeamWinProbabilityGauge";
 
 const { Text } = Typography;
 const markdown = `
@@ -20,7 +24,20 @@ Player **10612** in series **2843069** played **3 rounds**, losing all.  \n\n###
 Team 79 has moderate overall performance indicators:  \n\n- **Team Strength Score:** 0.351  \n- **Win Probability:** 44.9% across 33 series  \n\n### Combat Metrics\n- **Kills:** 179.9 | **Deaths:** 184.1 → **Kill Diff:** -4.18 (slightly negative)  \n- **Headshot Ratio:** 82.5% (strong precision)  \n\n### Teamplay Metrics\n- **Assist Density:** 0.425 (average teamwork)  \n- **Avg Player Kills:** 35.99  \n- **Kill Distribution Std:** 7.56 (moderate variation among players)  \n\n### Weapon Usage\n- **Rifle Ratio:** 66.3% (main weapon type)  \n- **Eco Ratio:** 17.5%  \n- **Sniper Ratio:** 2.1%  \n- **SMG Ratio:** 4.2%  \n- **Shotgun Ratio:** 1.0%  \n- **Weapon Dependency:** 0.463 (moderate reliance on specific weapons)  \n- **Weapon Entropy:** 1.697 (balanced weapon diversity)  \n\n### Strengths\n- Positive **kill differential** and **sniper usage** strongly support wins.  \n- Moderate benefits from **SMG** and **top weapon ratios**.  \n\n### Weaknesses\n- Negative **kill differential** and overreliance on **rifles** and **shotguns** slightly increase loss risk.  \n- Lower **assist density** suggests weaker team coordination.  \n\n### Weapon Win Impact Highlights\nTop-performing weapons: **Ares (0.667)**, **Shorty (0.594)**, **Outlaw (0.585)**, **Marshal (0.562)**, **Odin (0.562)**.  \nUnderperforming weapons: **Melee (0.391)**, **Bucky (0.442)**.  \n\n**Summary:**  \nTeam 79 shows decent mechanical skill (high headshot ratio) but struggles with kill balance and teamwork. Their success is boosted by effective use of heavy and precision weapons, though improving coordination and rifle efficiency could raise their win probability.
 `;
 
+
+// TEAM_PROBABILITY
+    //  "deaths_mean": 184.1673,
+    //     "kill_diff_mean": -4.2366,
+    //     "kills_mean": 179.9307,
+    //     "kills_p05": 147.7352,
+    //     "kills_p95": 212.3191,
+    //     "tool_name": "TEAM_PROBABILITY",
+    //     "winprob_mean": 0.5603
+
 const ChatGUI: React.FC = () => {
+
+  const [toolName , setToolName] =useState<TOOL_TYPES>()
+
   const [messages, setMessages] = useState([
     { role: "user", text: "Agent active. Chat contained within panel." },
     { role: "ai", text: "Agent active. Chat contained within panel." },
@@ -85,8 +102,55 @@ const ChatGUI: React.FC = () => {
                 prose-p:leading-relaxed prose-p:my-1
                 prose-pre:bg-gray-900 prose-pre:text-white prose-pre:p-2"
                       >
+                            {toolName === TOOL_TYPES.PLAYER_VS_PLAYER_PROBABILITY && <WinMeter artifacts={{
+                          pA_win_mean: 0,
+                          pA_win_median: 0,
+                          pA_win_p10: 0,
+                          pA_win_p90: 0,
+                          pA_win_simulated: 0,
+                          pB_win_mean: 0,
+                          tool_name: TOOL_TYPES.PLAYER_VS_PLAYER_PROBABILITY
+                        }}  />}
 
-                        <WinMeter />  
+
+                        {/* TEAM VS TEAM Probablity */}
+                        {toolName === TOOL_TYPES.TEAM_VS_TEAM_PROBABILITY && <TeamTeamWinMeter artifacts={{
+                          A_kills_mean: 0,
+                          A_win_prob_series_5th_percentile: 0,
+                          A_win_prob_series_95th_percentile: 0,
+                          A_win_prob_series_mean: 0,
+                          B_kills_mean: 0,
+                          B_win_prob_series_mean: 0,
+                          tool_name: TOOL_TYPES.TEAM_VS_TEAM_PROBABILITY
+                        }}  />}
+
+
+                         {  toolName === TOOL_TYPES.PLAYER_PROBABILITY && <PlayerWinProbabilityGauge  artificats={{
+                          monte_carlo : {
+                              "scenario": {
+                                "max": 0.013913239763782937,
+                                "mean": 0.012822876677376239,
+                                "median": 0.012828314625439645,
+                                "min": 0.011796312586674351,
+                                "p05": 0.012293703141787661,
+                                "p95": 0.013351347953044301,
+                                "std": 0.00032185763928617466
+                            }
+                                          }
+                         }}/>}  
+
+                         { toolName === TOOL_TYPES.TEAM_PROBABILITY && <TeamWinProbabilityGauge
+                           artificats={{
+                              "deaths_mean": 184.1673,
+                              "kill_diff_mean": -4.2366,
+                              "kills_mean": 179.9307,
+                              "kills_p05": 147.7352,
+                              "kills_p95": 212.3191,
+                              "tool_name": TOOL_TYPES.TEAM_PROBABILITY,
+                              "winprob_mean": 0.5603
+                           }}
+                         />}
+
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
                           {markdown}
                         </ReactMarkdown>

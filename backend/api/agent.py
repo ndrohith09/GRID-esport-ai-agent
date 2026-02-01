@@ -43,10 +43,10 @@ def call_ai_agent():
         msg_res = compile_graph.invoke(
             {"messages": initial_inputs}, thread_config, stream_mode="values"
         )
-        print("msg_res", msg_res)
+        print("msg_res", msg_res['artifacts'])
         final_msg = msg_res["messages"][-1]
         final_msg_text = final_msg.content
-        return jsonify({'final_msg': final_msg_text}), 201
+        return jsonify({'response': final_msg_text, "artifacts" : msg_res['artifacts']}), 201
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500

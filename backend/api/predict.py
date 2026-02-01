@@ -81,7 +81,6 @@ def team_vs_team_probability_monte_carlo():
 
     teamA_json = TeamPredictions().overall_team_classifier_model_output(teamA_id)
     teamB_json = TeamPredictions().overall_team_classifier_model_output(teamB_id)
-
     
     team_mc = TeamMonteCarloPredictions().simulate_match(teamA_json, teamB_json)
     return team_mc

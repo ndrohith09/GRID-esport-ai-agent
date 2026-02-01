@@ -21,7 +21,7 @@ class AgentStateSchema(TypedDict):
     """The state of the agent."""
 
     messages: Annotated[Sequence[BaseMessage], add_messages]
-    artifacts: Union[dict,None]
+    artifacts: Union[dict]
 
 class WebAgentGraphState:
 
@@ -212,7 +212,8 @@ Your response should be a concise and clear answer to the user's query based on 
 
 
         ###Build the graph nodes and edges
-        def response_node(state, config: RunnableConfig): 
+        def response_node(state, config: RunnableConfig):  
+                
             system_prompt = SystemMessage(cls.RESPONSE_PROMPT)
             response = response_model.invoke(
                 [system_prompt] + state["messages"], config
@@ -234,10 +235,8 @@ Your response should be a concise and clear answer to the user's query based on 
                     )
             else:
                 response = model.invoke([system_prompt] + state["messages"], config)
-            print("-----------------------------------------------")
-            print(response)
-            print("-----------------------------------------------")
-                
+ 
+
             return {"messages": [response]}
         
         def router_after_call_llm(
@@ -261,6 +260,9 @@ Your response should be a concise and clear answer to the user's query based on 
                     }
                 )
                 artifacts = tool_result.artifact
+                artifacts.update({
+                    "tool_name": tool_call["name"]
+                })
                 outputs.append(
                     ToolMessage(
                         content=tool_result.content,
@@ -268,8 +270,8 @@ Your response should be a concise and clear answer to the user's query based on 
                         tool_call_id=tool_call["id"],
                         artifact=artifacts,
                     )
-                )
-            return {"messages": outputs,artifacts:artifacts}
+                ) 
+            return {"messages": outputs, "artifacts":artifacts}
         
         
         builder = StateGraph(AgentStateSchema)
