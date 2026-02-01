@@ -2,7 +2,8 @@ from database.db import get_db, close_db
 import pandas as pd
 from flask import Blueprint, jsonify, request
 from flask_cors import cross_origin
-
+import requests
+from . import agent
 team_blueprint = Blueprint('teams', __name__)
 
 NECESSARY_TEAM_IDS = [97,79,96,1079,337,1611]
@@ -127,3 +128,62 @@ def get_team_series_round_data(team_id, series_id):
     """
     team_series_data = pd.read_sql_query(query, conn)
     return team_series_data.to_dict('records')
+
+"""
+Returns a particular user's chat data
+"""
+@team_blueprint.route("/teams/chat/get/<user_id>",methods=['GET'])
+def get_team_chat(user_id):
+    conn=get_db()
+    query=f"""
+        SELECT
+            id,message,user_id,created_time,CASE WHEN type = 0 THEN 'user' ELSE 'ai' END  as type
+        FROM
+            'team_chats'
+        WHERE
+            user_id = '{user_id}' ORDER BY created_time
+    """
+    teams_chat_data = pd.read_sql_query(query,conn)
+    conn.close()
+    return teams_chat_data.to_dict('records')
+
+"""
+    Add Particular chat to the team_chat
+"""
+@team_blueprint.route("/teams/chat/add",methods=['POST'])
+def add_team_chat():
+    conn = get_db()
+    data = request.json
+    team_id=data.get('team_id')
+    user_id = data.get('user_id')
+    message = data.get('message')
+
+    cursor = conn.cursor()
+    query = """
+            INSERT INTO team_chats (team_id,user_id, message,type)
+            VALUES (?,?, ? , ?)
+        """
+    cursor.execute(query, (team_id if team_id!=None else -1,user_id, message,0))
+    conn.commit()
+
+    result=agent.initiate_llm(message)
+
+
+    if result[1] == 201:
+        data = result[0]
+        
+        
+        cursor = conn.cursor()
+        query = """
+            INSERT INTO team_chats (team_id,user_id,message,type)
+            VALUES (?,?,?, ?)
+        """
+        cursor.execute(query, (team_id if team_id!=None else -1,user_id,str(data),1))
+        conn.commit()
+
+    else:
+        print(f"Error {result[1]}: {result[0]}")
+    
+    
+    return jsonify({'message':result[0]}), 201
+

@@ -13,10 +13,17 @@ LAZY_LOAD_LLM = None
 # Your users API endpoints here
 @agent_blueprint.route('/agent', methods=['POST'])
 def call_ai_agent():
+    
+    data = request.json
+    input_prompt = str(data.get('input_prompt')).strip()
+    result=initiate_llm(input_prompt)
+    return jsonify(result[0]),result[1]
+    
+
+
+def initiate_llm(input_prompt):
     global LAZY_LOAD_LLM
     try:
-        data = request.json
-        input_prompt = str(data.get('input_prompt')).strip()
         
         if (LAZY_LOAD_LLM==None) or (isinstance(LAZY_LOAD_LLM,AzureChatOpenAI)==False):
             # Load the model from azure services
@@ -46,7 +53,7 @@ def call_ai_agent():
         print("msg_res", msg_res)
         final_msg = msg_res["messages"][-1]
         final_msg_text = final_msg.content
-        return jsonify({'final_msg': final_msg_text}), 201
+        return {'final_msg': final_msg_text},201
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return {'error': str(e)}, 500
