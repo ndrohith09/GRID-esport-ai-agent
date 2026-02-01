@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import TypedDict, Annotated, Sequence, Literal
+from typing import TypedDict, Annotated, Sequence, Literal, Union
 from langchain_core.messages import (
     BaseMessage,
     SystemMessage,
@@ -21,6 +21,7 @@ class AgentStateSchema(TypedDict):
     """The state of the agent."""
 
     messages: Annotated[Sequence[BaseMessage], add_messages]
+    artifacts: Union[dict,None]
 
 class WebAgentGraphState:
 
@@ -259,15 +260,16 @@ Your response should be a concise and clear answer to the user's query based on 
                         "type": tool_call["type"],
                     }
                 )
+                artifacts = tool_result.artifact
                 outputs.append(
                     ToolMessage(
                         content=tool_result.content,
                         name=tool_result.name,
                         tool_call_id=tool_call["id"],
-                        artifact={},
+                        artifact=artifacts,
                     )
                 )
-            return {"messages": outputs}
+            return {"messages": outputs,artifacts:artifacts}
         
         
         builder = StateGraph(AgentStateSchema)
