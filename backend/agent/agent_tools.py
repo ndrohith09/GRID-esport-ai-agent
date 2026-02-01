@@ -80,7 +80,7 @@ class GetPlayerSeriesDataTool(BaseTool):
                 series_id=series_id
             )
             build_str = f"""Player {player_id} series {series_id} prediction JSON fetched successfully: \n {json.dumps(player_json, indent=2)}"""
-            return build_str, {}
+            return build_str, player_json
         except Exception as e:
             return f"Authentication Tool Execution Failed: {str(e)}", {}
 
@@ -154,7 +154,7 @@ class GetPlayerRoundDataTool(BaseTool):
                 round_id=round_id,
             )
             build_str = f"""Player {player_id} series {series_id} round {round_id} prediction JSON fetched successfully: \n {json.dumps(round_json, indent=2)}"""
-            return build_str, {}
+            return build_str, round_json
         except Exception as e:
             return f"Authentication Tool Execution Failed: {str(e)}", {}
 
@@ -224,7 +224,7 @@ class GetTeamOverallDataTool(BaseTool):
                 team_id=team_id
             )
             build_str = f"""Overall team {team_id} prediction JSON fetched successfully: \n {json.dumps(team_json, indent=2)}"""
-            return build_str, {}
+            return build_str, team_json
         except Exception as e:
             return f"Authentication Tool Execution Failed: {str(e)}", {}
 
@@ -286,7 +286,7 @@ class GetTeamSeriesDataTool(BaseTool):
                 series_id=series_id,
             )
             build_str = f"""Team {team_id} series {series_id} prediction JSON fetched successfully: \n {json.dumps(team_json, indent=2)}"""
-            return build_str, {}
+            return build_str, team_json
         except Exception as e:
             return f"Authentication Tool Execution Failed: {str(e)}", {}
 
@@ -358,7 +358,7 @@ class PlayerProbabilityMonteCarloTool(BaseTool):
                 {}
             )
             build_str = f"""Monte Carlo simulation completed successfully: \n Monte Carlo Output (mc):\n {json.dumps(player_mc, indent=2)}"""
-            return build_str, {}
+            return build_str, player_mc
         except Exception as e:
             return f"Authentication Tool Execution Failed: {str(e)}", {}
 
@@ -433,7 +433,7 @@ class GetPlayerVsPlayerMonteCarloTool(BaseTool):
                 playerA_json, playerB_json
             )  
             build_str = f"""Player vs Player Monte Carlo completed: \n Monte Carlo Output (mc):\n {json.dumps(player_mc, indent=2)}"""
-            return build_str, {}
+            return build_str, player_mc
         except Exception as e:
             return f"Authentication Tool Execution Failed: {str(e)}", {}
 
@@ -519,7 +519,7 @@ class TeamVsTeamMonteCarloTool(BaseTool):
             team_mc = TeamMonteCarloPredictions().simulate_match(teamA_json, teamB_json)
             print("----->", team_mc)
             build_str = f"""Monte Carlo Team-vs-Team simulation complete: \n Monte Carlo Output (mc):\n {json.dumps(team_mc, indent=2)}"""
-            return build_str, {}
+            return build_str, team_mc
         except Exception as e:
             return f"Authentication Tool Execution Failed: {str(e)}", {}
 
@@ -583,7 +583,7 @@ class TeamProbabilityMonteCarloTool(BaseTool):
         
  
             build_str = f"""Team Monte Carlo simulation completed successfully: \n Monte Carlo Output (mc):\n {json.dumps(team_mc, indent=2)}"""
-            return build_str, {}
+            return build_str, team_mc
         except Exception as e:
             return f"Authentication Tool Execution Failed: {str(e)}", {}
 
