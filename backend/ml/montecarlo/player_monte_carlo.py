@@ -257,7 +257,7 @@ class PlayerMonteCarloPredictions:
     '''
     Monte Carlo what-if
     '''
-    def monte_carlo_player(self,player_json, n=1000, seed=42):
+    def monte_carlo_player(self,player_json, n=10000, seed=42):
         rng = np.random.default_rng(seed)
         probs = []
 
@@ -325,7 +325,7 @@ class PlayerMonteCarloPredictions:
     '''
     Main Function: Monte Carlo player vs player win prob
     '''
-    def monte_carlo_player_vs_player(self, playerA_json, playerB_json, n=1000, seed=42, temperature=1.0):
+    def monte_carlo_player_vs_player(self, playerA_json, playerB_json, n=10000, seed=42, temperature=1.0):
         rng = np.random.default_rng(seed)
 
         winsA = 0
@@ -370,14 +370,14 @@ class PlayerMonteCarloPredictions:
     '''
     Main prediction function
     '''
-    def monte_carlo_player_win_probability(self, playerA_json, updates, n_mc=1000, seed=42):
+    def monte_carlo_player_win_probability(self, playerA_json, updates, n_mc=10000, seed=42):
         """
         Calculate the delta in win probability for a given player scenario.
 
         Args:
         - playerA_json (dict): The base player JSON.
         - updates (dict): Updates to apply to the player JSON.
-        - n_mc (int, optional): Number of Monte Carlo simulations. Defaults to 1000.
+        - n_mc (int, optional): Number of Monte Carlo simulations. Defaults to 10000.
         - seed (int, optional): Random seed for reproducibility. Defaults to 42.
 
         Returns:
