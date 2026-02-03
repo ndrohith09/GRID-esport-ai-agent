@@ -46,12 +46,12 @@ def add_team():
 
 
 @home_blueprint.route('/scouting-report', methods=['POST'])
-def scouting_report():
-    # Load HTML template
+def generate_scouting_report():
+#     # Load HTML template
     data = request.json
     team_id = data.get('team_id')
-    series_id = data.get('series_id')
-     
+    series_id = data.get('series_id') 
+    
     team_overall_json_data = TeamPredictions().overall_team_classifier_model_output(team_id)
     team_series_json_data = TeamPredictions().team_series_classifier_model_output(team_id, series_id)
 
@@ -69,7 +69,7 @@ def scouting_report():
     players_list = []
     rounds_list = []
     players = get_players(team_id)
-    for player in players[:2]:
+    for player in players:
         player_json = PlayerPredictions().overall_player_series_classifier_model_output(player['player_id'], series_id)
         players_list.append(player_json)
 
@@ -77,7 +77,50 @@ def scouting_report():
     rounds_list = [
         PlayerPredictions().player_round_classifier_model_output(player['player_id'], series_id, round=round_id)
         for round_id in rounds
-        for player in players[:1]
+        for player in players
+    ]
+ 
+    env = Environment(loader=FileSystemLoader('templates')) 
+    template = env.get_template('main.html')
+    html = template.render(team_overall=team_overall_json_data, team_series=team_series_json_data, player_series_list=players_list, rounds=rounds_list)
+
+    # Generate PDF from HTML
+    pdf_file = 'json_data.pdf'
+    pdfkit.from_string(html, pdf_file)
+
+    # Return JSON response with PDF URL
+    pdf_url = url_for('home.serve_pdf', filename=pdf_file, _external=True)
+    return jsonify({'pdf_url': pdf_url})
+
+
+def scouting_report(team_id, series_id):
+    
+    team_overall_json_data = TeamPredictions().overall_team_classifier_model_output(team_id)
+    team_series_json_data = TeamPredictions().team_series_classifier_model_output(team_id, series_id)
+
+    def get_players(team_id):
+        conn = get_db()
+        players_q = f"""
+            SELECT DISTINCT p.player_id, p.player_name
+            FROM 'all-players' p
+            WHERE p.team_id = '{team_id}'
+        """
+        players_table = pd.read_sql_query(players_q, conn)
+        players_details = players_table.to_dict(orient  ='records')
+        return players_details
+    
+    players_list = []
+    rounds_list = []
+    players = get_players(team_id)
+    for player in players:
+        player_json = PlayerPredictions().overall_player_series_classifier_model_output(player['player_id'], series_id)
+        players_list.append(player_json)
+
+    rounds = [1, 2, 3]
+    rounds_list = [
+        PlayerPredictions().player_round_classifier_model_output(player['player_id'], series_id, round=round_id)
+        for round_id in rounds
+        for player in players
     ]
  
     env = Environment(loader=FileSystemLoader('templates')) 

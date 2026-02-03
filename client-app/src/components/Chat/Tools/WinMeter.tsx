@@ -37,8 +37,8 @@ artifacts
       {/* Main End-to-End Probability Display */}
       <div className="flex justify-between items-baseline mb-2">
         <div className="flex flex-col">
-          <span className="text-xl font-black italic tracking-tighter leading-none">
-            {artifacts.pA_win_mean}%
+          <span className="text-xl font-black tracking-tighter leading-none">
+            {Number((artifacts.pA_win_mean * 100).toFixed(2))}%
           </span>
           <span className="text-[9px] font-bold text-black uppercase mt-1">
             Player_A
@@ -46,8 +46,8 @@ artifacts
         </div>
 
         <div className="flex flex-col items-end">
-          <span className="text-xl font-black italic tracking-tighter leading-none text-gray-300">
-            {artifacts.pB_win_mean}%
+          <span className="text-xl font-black tracking-tighter leading-none text-gray-300">
+            {Number((artifacts.pB_win_mean * 100).toFixed(2))}%
           </span>
           <span className="text-[9px] font-bold text-gray-300 uppercase mt-1">
             Player_B
@@ -63,11 +63,11 @@ artifacts
         <div className="flex h-full w-full">
           <div
             className="h-full bg-black transition-all duration-1000 ease-out"
-            style={{ width: `${artifacts.pA_win_mean}%` }}
+            style={{ width: `${Number((artifacts.pA_win_mean * 100).toFixed(2))}%` }}
           />
           <div
             className="h-full bg-gray-200 transition-all duration-1000 ease-out"
-            style={{ width: `${artifacts.pB_win_mean}%` }}
+            style={{ width: `${Number((artifacts.pB_win_mean * 100).toFixed(2))}%` }}
           />
         </div>
       </div>

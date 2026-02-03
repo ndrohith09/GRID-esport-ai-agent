@@ -14,7 +14,7 @@ from langchain_openai import AzureChatOpenAI
 from config.settings import AZURE_OPENAI_ENDPOINT,AZURE_OPENAI_API_KEY,OPENAI_API_VERSION,AZURE_DEPLOYMENT
 from datetime import datetime
 import pytz
-from .agent_tools import PlayerProbabilityMonteCarloTool, GetPlayerVsPlayerMonteCarloTool, TeamVsTeamMonteCarloTool, TeamProbabilityMonteCarloTool, GetPlayerSeriesDataTool, GetPlayerRoundDataTool, GetTeamOverallDataTool, GetTeamSeriesDataTool
+from .agent_tools import TeamSeriesScoutingReportTool ,PlayerProbabilityMonteCarloTool, GetPlayerVsPlayerMonteCarloTool, TeamVsTeamMonteCarloTool, TeamProbabilityMonteCarloTool, GetPlayerSeriesDataTool, GetPlayerRoundDataTool, GetTeamOverallDataTool, GetTeamSeriesDataTool
 
 ###Define Graph State
 class AgentStateSchema(TypedDict):
@@ -135,8 +135,12 @@ You are equipped with this set of tools and granted high privileges. Use can inv
 - PLAYER_VS_PLAYER_PROBABILITY : Tool for handling **only Player A vs Player B and returns win probability output.** Handles queries related only to prediction of two players win probability
 - TEAM_VS_TEAM_PROBABILITY : Tool for handling **only Team A vs Team B and returns win probability output.** Handles queries related only to prediction of two teams win probability
 - TEAM_PROBABILITY : Use this tool **only to estimate team's win probability distribution.**
+- GENERATE_SCOUTING_REPORT: Use this tool **only to generate series scouting report of team.**
 
 ### Scenario to invoke tools
+- GENERATE_SCOUTING_REPORT: Use this tool whe user prompts **scouting report** and provides **team_id** & **series_id**. Invoke only GENERATE_SCOUTING_REPORT tool if scouting report is asked. Don't invoke other tools.
+(eg. i need scouting report for team_id:79 for the series_id:2843069 .)
+
 - TEAM_VS_TEAM_PROBABILITY: Use this tool when user prompts **what-if** and provides **team_id** vs **team_id** and asks to compute win probability between two teams. **Don't invoke** GET_TEAM_SERIES_DATA, GET_TEAM_OVERALL_DATA when **two teams** are asked to compare their win probability.
 (eg. what-if team_id:79 vs team_id:97 plays? compute the win probability.)
 
@@ -154,7 +158,6 @@ You are equipped with this set of tools and granted high privileges. Use can inv
 
 - GET_PLAYER_ROUND_DATA: Use this tool when users provides **player_id**, **series_id** & **round_id** and asks to **analyse the player ROUND stats in that SERIES.
 (eg. Give me round_id:1 analysis of the player_id:10612 from series_id:2843069. )
-
 
 - GET_TEAM_SERIES_DATA: Use this tool when users provides **team_id** & **series_id**  and asks to **analyse the team's stats in that SERIES**.
 (eg. Analyse the team_id:79 stats of series_id:2843069. )
@@ -204,7 +207,7 @@ Your response should be a concise and clear answer to the user's query based on 
             TeamVsTeamMonteCarloTool(meta=thread_config),
             GetPlayerVsPlayerMonteCarloTool(meta=thread_config),
             PlayerProbabilityMonteCarloTool(meta=thread_config), 
-            
+            TeamSeriesScoutingReportTool(meta=thread_config)
             ]
         response_model = model
         model = model.bind_tools(toolkits)

@@ -2,7 +2,7 @@ from database.db import get_db, close_db
 import pandas as pd
 from flask import Blueprint, jsonify, request
 from flask_cors import cross_origin
-import requests
+import json
 from . import agent
 team_blueprint = Blueprint('teams', __name__)
 
@@ -179,6 +179,7 @@ def add_team_chat():
     team_id=data.get('team_id')
     user_id = data.get('user_id')
     message = data.get('message')
+    llm_input = data.get('llm_input')
 
     cursor = conn.cursor()
     query = """
@@ -188,24 +189,23 @@ def add_team_chat():
     cursor.execute(query, (team_id if team_id!=None else -1,user_id, message,0))
     conn.commit()
 
-    result=agent.initiate_llm(message)
-
-
+    result=agent.initiate_llm(llm_input)
+    print('---------------------------------------------')
+    print(type(result[0].data.decode('utf-8')), result[0].data.decode('utf-8'))
     if result[1] == 201:
-        data = result[0]
-        
-        
+        data = result[0].data.decode('utf-8')  # decode bytes to string 
+
         cursor = conn.cursor()
         query = """
             INSERT INTO team_chats (team_id,user_id,message,type)
             VALUES (?,?,?, ?)
         """
-        cursor.execute(query, (team_id if team_id!=None else -1,user_id,str(data),1))
+        cursor.execute(query, (team_id if team_id!=None else -1,user_id,data,1))
         conn.commit()
 
     else:
         print(f"Error {result[1]}: {result[0]}")
     
     
-    return jsonify({'message':result[0]}), 201
+    return jsonify({'message': json.loads(result[0].data.decode('utf-8'))}), 201
 

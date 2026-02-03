@@ -1,7 +1,14 @@
 79 - 2843069 - 
 2843060 (21-aug-2025)
 
-[TODO] Against whom the match was played?
+100 Theives
+
+Jet Brains IDE
+
+[TODO] Docs: All the stats show in the dashboard are fully ML Generated. Nothing is dummy stats
+Generate report docs
+
+Against whom the match was played?
 
 Monte Carlo (10k simulations) - pdf report generation
 

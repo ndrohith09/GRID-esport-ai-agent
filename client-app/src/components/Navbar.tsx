@@ -47,19 +47,19 @@ const Navbar = ({ teams }: { teams: GameType[] }) => {
     navigate(`/dashboard/${e.key}`)
   };
 
-  const scoutingHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setLoading(true);
-     generateScoutingReport(team_id ?? '', series_id ?? '')
-     .then((res) => {
-       console.log("Res", res.pdf_url);
-       setLoading(false);
-      window.open(res.pdf_url, '_blank');
-     })
-     .catch((err) => {
-       setLoading(false);
-      console.log("err",err)
-     })
-  };
+  // const scoutingHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   setLoading(true);
+  //    generateScoutingReport(team_id ?? '', series_id ?? '')
+  //    .then((res) => {
+  //      console.log("Res", res.pdf_url);
+  //      setLoading(false);
+  //     window.open(res.pdf_url, '_blank');
+  //    })
+  //    .catch((err) => {
+  //      setLoading(false);
+  //     console.log("err",err)
+  //    })
+  // };
 
   const menuProps = {
     items,
@@ -112,7 +112,7 @@ const Navbar = ({ teams }: { teams: GameType[] }) => {
                 </Button>
               );
             })}
-            <Button
+            {/* <Button
                   // key={item.path}
                   icon={<FileTextOutlined />}
                   // 1. Change the path on click
@@ -128,7 +128,7 @@ const Navbar = ({ teams }: { teams: GameType[] }) => {
             `}
                 >
                                {loading ? 'Generating...' : 'Scouting Report'}
-                </Button>
+                </Button> */}
           </div>
 
           <div className="flex items-center space-x-2">

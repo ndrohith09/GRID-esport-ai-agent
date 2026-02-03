@@ -14,6 +14,7 @@ from config.settings import AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_API_KEY, TIME_ZO
 from ml.montecarlo.player_monte_carlo import PlayerMonteCarloPredictions 
 from ml.montecarlo.team_monte_carlo import TeamMonteCarloPredictions 
 from api.players import get_series_id_of_player, extract_team__simulation_params, extract_player_simulation_params
+from api.home import scouting_report
 
 """===================JSON Tool Analyzer===================="""
 class GetPlayerSeriesDataRequest(BaseModel):
@@ -151,11 +152,12 @@ class GetPlayerRoundDataTool(BaseTool):
             round_json = PlayerPredictions().player_round_classifier_model_output(
                 player_id=player_id,
                 series_id=series_id,
-                round_id=round_id,
+                round=round_id,
             )
             build_str = f"""Player {player_id} series {series_id} round {round_id} prediction JSON fetched successfully: \n {json.dumps(round_json, indent=2)}"""
             return build_str, round_json
         except Exception as e:
+            print("Error --->", e)
             return f"Authentication Tool Execution Failed: {str(e)}", {}
 
 class GetTeamOverallDataRequest(BaseModel):
@@ -355,7 +357,10 @@ class PlayerProbabilityMonteCarloTool(BaseTool):
             # Step 3: Monte Carlo simulation
             player_mc = PlayerMonteCarloPredictions().monte_carlo_player_win_probability(
                 player_json,
-                {}
+                {
+                    "weapon_usage_ratio.smg ": 0.62,
+                "weapon_damage_ratio.rifle": 0.70,
+                }
             )
             build_str = f"""Monte Carlo simulation completed successfully: \n Monte Carlo Output (mc):\n {json.dumps(player_mc, indent=2)}"""
             return build_str, player_mc
@@ -535,34 +540,12 @@ class TeamProbabilityMonteCarloTool(BaseTool):
     """
         Use this tool **only to estimate team's win probability distribution.**
     """
-#     """
-#     Runs Monte Carlo simulation for a team's win probability based on overall team JSON.
-
-#     TOOL: **TEAM_PROBABILITY_MONTE_CARLO**
-
-# Use this tool when the user asks:
-# - Monte Carlo win probability
-# - what-if simulations with uncertainty
-# - probability distribution instead of single win_probability
-
-# After tool call:
-# - Use artifact.mc as the simulation output.
-# - Use artifact.simulator_params_extracted to explain what parameters are available.
-# - Provide:
-#   1) baseline distribution (mean/median/p10/p90)
-#   2) interpretation (stability/risk)
-#   3) how simulator_params affect output
-# - Never invent results.
-#     """
 
     name: str = "TEAM_PROBABILITY"
     description: str = (
         "Use this tool **only to estimate team's win probability distribution.**"
     )
-    # description: str = (
-    #     "Run Monte Carlo simulation to estimate team win probability distribution. "
-    #     "Takes team_id and simulator_params."
-    # )
+ 
     args_schema: t.Type[BaseModel] = TeamProbabilityMonteCarloRequest
 
     response_format: str = "content_and_artifact"
@@ -579,11 +562,58 @@ class TeamProbabilityMonteCarloTool(BaseTool):
             simulator_params = kwargs.get('simulator_params', {})  
 
             teamA_json = TeamPredictions().overall_team_classifier_model_output(team_id)
-            team_mc = TeamMonteCarloPredictions().simulate_team_win_probability(teamA_json, params={})
+            team_mc = TeamMonteCarloPredictions().simulate_team_win_probability(teamA_json, params={
+                    "overall_weapon_win_impact.phantom": 0.65,
+                    "team_strength_score": 0.75,
+            })
         
  
             build_str = f"""Team Monte Carlo simulation completed successfully: \n Monte Carlo Output (mc):\n {json.dumps(team_mc, indent=2)}"""
             return build_str, team_mc
         except Exception as e:
+            return f"Authentication Tool Execution Failed: {str(e)}", {}
+
+
+# ---- SCOUTING REPORT --------
+
+class TeamSeriesScoutingReportRequest(BaseModel):
+    """Request schema for team win probability Monte Carlo simulation."""
+    team_id: int = Field(..., description="Team ID")
+    series_id: int = Field(..., description="Series ID")
+
+class TeamSeriesScoutingReportTool(BaseTool):
+    """
+        Use this tool **only to generate team's scouting report for series.**
+    """
+
+    name: str = "GENERATE_SCOUTING_REPORT"
+    description: str = (
+        "Use this tool **only to generate team's scouting report for series.**"
+    )
+ 
+    args_schema: t.Type[BaseModel] = TeamProbabilityMonteCarloRequest
+
+    response_format: str = "content_and_artifact"
+    return_direct: bool = True
+    meta: t.List = {}
+
+    def __init__(self,meta:dict={}):
+        super().__init__()
+        self.meta = meta
+
+    def _run(self, **kwargs) -> t.Tuple[dict, dict]:
+        try:
+            team_id = kwargs.get('team_id')  
+            series_id = kwargs.get('series_id')  
+            
+            report = scouting_report(team_id, series_id)
+            report = {
+                "pdf_url": "http://localhost:8000/serve-pdf/json_data.pdf"
+            }
+ 
+            build_str = f"""Scouting Report Generated for Team ID{team_id}, Series ID{series_id}. Use the URL to access report:"""
+            return build_str, report
+        except Exception as e:
+            print("error", e)
             return f"Authentication Tool Execution Failed: {str(e)}", {}
 

@@ -12,7 +12,8 @@ const SeriesBanner:React.FC<Props> = ({
 }) => {
 
   const { team_id, series_id } = useParams();
-    const won = 0;
+    const won = teamSeriesData.meta_data.round_won;
+    // const won = 1;
     
     return(
             <div className={`relative overflow-hidden rounded-2xl border mb-6 transition-all duration-500 bg-black border-black text-white shadow-xl shadow-black/10`}>

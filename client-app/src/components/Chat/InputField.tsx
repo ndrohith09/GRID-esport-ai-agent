@@ -1,11 +1,11 @@
 import { SendOutlined } from "@ant-design/icons";
 import { Button, Flex, Mentions } from "antd";
-import { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { getAllPlayers, getTeamSeriesList, getTeamsList } from "../../api/team";
 import type { Teams } from "../Simulate/types";
 import type { PlayerType } from "../Player/types";
 import { useParams } from "react-router-dom";
-import type { SeriesData } from "../Dashboard/types";
+import type { SeriesData } from "../Dashboard/types"; 
 
 export type SelectOptions = {
     value: string;
@@ -14,7 +14,15 @@ export type SelectOptions = {
     id: string;
 }
 
-const ChatInput = () => {
+type Props = {
+  submitHandler: (message:string, llm_input: string) => void;
+  loading: boolean;
+}
+
+const ChatInput:React.FC<Props> = ({
+  submitHandler,
+  loading
+}) => {
   const [input, setInput] = useState("");
   const [hiddenInput, setHiddenInput] = useState('');
   const [activeOptions, setActiveOptions] = useState<
@@ -22,6 +30,7 @@ const ChatInput = () => {
   >([]);
 
   const { team_id } = useParams();
+  const selectingRef = useRef(false);
 
   const [teams, setTeams] = useState<SelectOptions[]>([]);
   const [allTeamPlayers, setAllTeamPlayers] = useState<SelectOptions[]>([]);
@@ -37,7 +46,6 @@ const ChatInput = () => {
           id: team.team_id.toString()
         }));
         setTeams(teamOptions);
-        console.log("Fetched Teams:", data);
       })
       .catch((error) => {
         console.error("Error fetching teams:", error);
@@ -68,30 +76,76 @@ const ChatInput = () => {
           id: team.player_id.toString()
         }));
         setAllTeamPlayers(options);
-        console.log("Fetched Teams:", data);
       })
       .catch((error) => {
         console.error("Error fetching teams:", error);
       });
   }, []);
 
-  const handleSend = () => {
-    console.log("input - ", input,  hiddenInput)
-    // if (!input.trim()) return;
-    // setMessages([...messages, { role: "user", text: input }]);
-    // setInput("");
-  };
 
-  // Logic to switch data source based on prefix
-  const handleSearch = (_: string, prefix: string) => {
-    if (prefix === "#") {
-      setActiveOptions(teams);
-    } else if (prefix === "@") {
-      setActiveOptions(allTeamPlayers);
-    } else if (prefix === "$") {
-      setActiveOptions(seriesData);
-    }
-  };
+const playerNameToId = useMemo(() => {
+  const m = new Map<string, number>();
+  allTeamPlayers.forEach(p => m.set(p.label, Number(p.id)));
+  return m;
+}, [allTeamPlayers]);
+
+const teamNameToId = useMemo(() => {
+  const m = new Map<string, number>();
+  teams.forEach(t => m.set(t.label, Number(t.id)));
+  return m;
+}, [teams]);
+
+const seriesNameToId = useMemo(() => {
+  const m = new Map<string, number>();
+  seriesData.forEach(s => m.set(s.label, Number(s.id)));
+  return m;
+}, [seriesData]);
+
+const toHiddenInput = (text: string) => {
+  // Replace @Name, #Team, $Series with @player_id:X, #team_id:Y, $series_id:Z
+  return text
+    .replace(/@([^\s@#$?.,!]+)/g, (match, name) => {
+      const id = playerNameToId.get(name);
+      return id ? `player_id:${id} (${name})` : match;
+    })
+    .replace(/#([^\s@#$?.,!]+)/g, (match, name) => {
+      const id = teamNameToId.get(name);
+      return id ? `#team_id:${id} (${name})` : match;
+    })
+    .replace(/\$([^\s@#$?.,!]+)/g, (match, name) => {
+      return  `$series_id: ${match}`;
+    });
+};
+
+const handleSearch = (_: string, prefix: string) => {
+  if (prefix === "@") {
+    setActiveOptions(
+      allTeamPlayers.map((p) => ({
+        key: p.id,
+        value: p.label, // inserted in input
+        label: p.label,
+      }))
+    );
+  } else if (prefix === "#") {
+    setActiveOptions(
+      teams.map((t) => ({
+        key: t.id,
+        value: t.label,
+        label: t.label,
+      }))
+    );
+  } else if (prefix === "$") {
+    setActiveOptions(
+      seriesData.map((s) => ({
+        key: s.id,
+        value: s.label,
+        label: s.label,
+      }))
+    );
+  }
+};
+
+
   return (
     <div className="p-4 bg-white border-t border-gray-50 flex-none">
       <div className="max-w-full mx-auto"> 
@@ -108,38 +162,31 @@ const ChatInput = () => {
 
         <div className="flex bg-gray-50 shadow-xs rounded-xl border border-gray-100 p-1.5 focus-within:bg-white focus-within:border-gray-200 transition-all">
        
-        <Mentions
-        autoSize={{ minRows: 1, maxRows: 4 }}
-        placeholder="Type @ for players, # for teams, $ for series..."
-        value={input}
-        onChange={(val) => setInput(val)}
-        onSearch={handleSearch}  
-        onSelect={(option, prefix) => {
-          let newValue = input;
-          let hiddenValue = input;
-          if (prefix === '@') {
-            newValue += option.label;
-            hiddenValue += `player_id:${option.id} `;
-          } else if (prefix === '#') {
-            newValue += option.label;
-            hiddenValue += `team_id:${option.id} `;
-          } else if (prefix === '$') {
-            newValue += option.label;
-            hiddenValue += `series_id:${option.id} `;
-          }
-          setInput(newValue);
-          setHiddenInput(hiddenValue);
-        }}
-        variant="borderless"
-        className="pr-12 text-[12px] py-1 placeholder:text-gray-300 w-full"
-        prefix={["@", "#", "$"]}
-        options={activeOptions}
-      />
+ <Mentions
+  autoSize={{ minRows: 1, maxRows: 4 }}
+  placeholder="Type @ for players, # for teams, $ for series..."
+  value={input}
+  onChange={(val) => {
+    setInput(val);
+    setHiddenInput(toHiddenInput(val)); // 🔥 always update hidden
+  }}
+  onSearch={handleSearch}
+  variant="borderless"
+  className="pr-12 text-[12px] py-1 placeholder:text-gray-300 w-full"
+  prefix={["@", "#", "$"]}
+  options={activeOptions}
+/>
+
+
+
 
           <Button
             type="text"
             icon={<SendOutlined style={{ fontSize: "14px" }} />}
-            onClick={handleSend}
+            onClick={() => {                  
+              submitHandler(input, hiddenInput)           
+            }}
+            disabled={loading}
             className={`absolute right-1 bottom-0 ${input.trim() ? "text-black" : "text-gray-300"}`}
           />
         </div>

@@ -19,7 +19,6 @@ const AddTeam: React.FC = () => {
 useEffect(() => {
   getTeamsList().then((data : Teams[] ) => {
     // setRawTeams(data);
-    console.log("Fetched Teams:", data);
     const options = data.map((team, index) => ({
       value: team.team_name, 
       label: `${team.team_name}`, 
@@ -40,7 +39,7 @@ useEffect(() => {
     {
       id: "lol",
       name: "LEAGUE OF LEGENDS",
-      img: "https://i.pinimg.com/736x/b7/cf/62/b7cf62846ae6ae5e96b35cf9d5e05a7c.jpg",
+      img: "https://cdn.wallpapersafari.com/33/72/O5FWQk.png",
     },
   ];
  

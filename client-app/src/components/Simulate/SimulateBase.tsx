@@ -21,7 +21,6 @@ const SimulateBase: React.FC = () => {
   useEffect(() => {
     getTeamsList()
       .then((data: Teams[]) => {
-        console.log("Fetched Teams:", data);
         const options = data.map((team, index) => ({
           value: team.team_name,
           label: `${team.team_name}`,

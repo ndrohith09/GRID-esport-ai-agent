@@ -27,7 +27,7 @@ const TeamWinProbabilityGauge: React.FC<WinProbabilityProps> = ({ artificats }) 
         </div>
         <div className="text-right">
           <span className="text-3xl font-black tracking-tighter leading-none">
-              {Number((artificats.winprob_mean * 1000).toFixed(2))}%
+              {Number((artificats.winprob_mean * 100).toFixed(2))}%
           </span>
         </div>
       </div>
@@ -39,7 +39,7 @@ const TeamWinProbabilityGauge: React.FC<WinProbabilityProps> = ({ artificats }) 
           {/* Active Fill */}
           <div 
             className="h-full bg-black transition-all duration-1000 ease-out relative"
-            style={{ width: `${Number((artificats.winprob_mean * 1000).toFixed(2))}%` }}
+            style={{ width: `${Number((artificats.winprob_mean * 100).toFixed(2))}%` }}
           >
             {/* Glossy Overlay for a "Pro" look */}
             <div className="absolute inset-0 opacity-20 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
